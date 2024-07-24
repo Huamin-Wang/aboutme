@@ -2,10 +2,11 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>欢迎联系我学习交流</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
@@ -13,50 +14,70 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            background-image: url('bg.jpeg'); /* 背景图案 */
+            background-size: cover;
+            background-attachment: fixed;
         }
         .container {
-            width: 80%;
-            background-color: white;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 600px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             text-align: center;
+            border-radius: 10px;
+            backdrop-filter: blur(10px); /* 模糊背景 */
+            animation: fadeIn 1s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         h1 {
-            margin-top: 0;
-            color: #333;
+            color: #333333;
+            font-size: 28px;
+            margin-bottom: 20px;
         }
         h2 {
-            color: #333;
-            margin: 20px 0;
+            color: #333333;
+            font-size: 22px;
+            margin: 20px 0 10px;
         }
         p {
+            color: #555555;
+            font-size: 18px;
             margin: 10px 0;
         }
         img {
             display: block;
             margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         a {
-            color: #333;
+            color: #007bff;
             text-decoration: none;
             font-weight: bold;
+            transition: color 0.3s ease;
         }
         a:hover {
-            color: #007bff;
+            color: #0056b3;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>欢迎联系我学习交流</h1>
-        
-        <h2>1.微信公众号：</h2>
-        <p><img src="./weixin_code.png" alt="微信公众号：效率提升实验室" width="300px" height="auto"></p>
-        
-        <h2>2.Gitee地址：</h2>
+
+        <h2>1. 微信公众号：</h2>
+        <p><img src="./weixin_code.png" alt="微信公众号：效率提升实验室"></p>
+
+        <h2>2. Gitee 地址：</h2>
         <p><a href="https://gitee.com/wang_hua_min" target="_blank">https://gitee.com/wang_hua_min</a></p>
-        
-        <h2>3.GitHub地址：</h2>
+
+        <h2>3. GitHub 地址：</h2>
         <p><a href="https://github.com/Huamin-Wang" target="_blank">https://github.com/Huamin-Wang</a></p>
     </div>
 </body>
