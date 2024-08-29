@@ -1,272 +1,58 @@
-// forum.js
-// Ensure the DOM is fully loaded before attaching event listeners
 document.addEventListener('DOMContentLoaded', () => {
-    const postButton = document.getElementById('postButton');
-    const postForm = document.getElementById('postForm');
-    const postFormElement = document.getElementById('postFormElement');
-
-    // Toggle post form visibility
-    if (postButton && postForm) {
-        postButton.addEventListener('click', () => {
-            postForm.style.display = postForm.style.display === 'none' ? 'block' : 'none';
-        });
-    } else {
-        console.error('postButton or postForm element not found');
-    }
-
-    // Bind submitPost function to form submission
-    if (postFormElement) {
-        postFormElement.addEventListener('submit', submitPost);
-    } else {
-        console.error('postFormElement not found');
-    }
-});
-
-// Function to handle post submission
-// Ensure the DOM is fully loaded before attaching event listeners
-document.addEventListener('DOMContentLoaded', () => {
-    const postButton = document.getElementById('postButton');
-    const postForm = document.getElementById('postForm');
-    const postFormElement = document.getElementById('postFormElement');
-
-    // Toggle post form visibility
-    if (postButton && postForm) {
-        postButton.addEventListener('click', () => {
-            postForm.style.display = postForm.style.display === 'none' ? 'block' : 'none';
-        });
-    } else {
-        console.error('postButton or postForm element not found');
-    }
-
-    // Bind submitPost function to form submission
-    if (postFormElement) {
-        postFormElement.addEventListener('submit', submitPost);
-    } else {
-        console.error('postFormElement not found');
-    }
-});
-
-// Function to handle post submission
-async function submitPost(event) {
-    event.preventDefault();  // Prevent default form submission behavior
-    const title = document.getElementById('postTitle').value;
-    const content = document.getElementById('postContent').value;
-    const imageFile = document.getElementById('postImage').files[0];
-    const timestamp = new Date().toISOString();
-    const id = generateUniqueId();
-    let imageUrl = '';
-
-    if (imageFile) {
-        try {
-            imageUrl = await uploadImage(imageFile);
-        } catch (error) {
-            console.error('Error uploading image:', error.message);
-            return;
-        }
-    }
-
-    const newPost = { id, title, content, imageUrl, timestamp, replies: [] };
-
-    try {
-        let { sha, content: fileContent } = await getFileContent();
-        fileContent.push(newPost);
-        await updateFileContent(fileContent, sha);
-        loadPosts();  // Refresh post list
-
-        // Clear form
-        document.getElementById('postTitle').value = '';
-        document.getElementById('postContent').value = '';
-        document.getElementById('postImage').value = '';
-    } catch (error) {
-        console.error('Error in submitPost:', error.message);
-    }
-}
-async function uploadImage(imageFile) {
-    const formData = new FormData();
-    formData.append('file', imageFile);
-    formData.append('message', 'Upload post image');
-    formData.append('branch', 'main');
-
-    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/images/${imageFile.name}`, {
-        method: 'PUT',
-        headers: {
-            'Authorization': `token ${token}`,
-            'Accept': 'application/vnd.github.v3+json'
-        },
-        body: formData
-    });
-
-    if (!response.ok) {
-        throw new Error('Failed to upload image');
-    }
-
-    const data = await response.json();
-    return data.content.download_url;
-}
-
-function generateUniqueId() {
-    return '_' + Math.random().toString(36).substr(2, 9);
-}
-
-async function getFileContent() {
-    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-        headers: { "Authorization": `token ${token}`, "Accept": "application/vnd.github.v3+json" }
-    });
-
-    if (response.status === 404) {
-        return { sha: null, content: [] };
-    } else if (!response.ok) {
-        throw new Error('Failed to fetch file content');
-    }
-
-    const fileData = await response.json();
-    let content;
-    try {
-        content = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
-    } catch (error) {
-        content = [];
-    }
-    return { sha: fileData.sha, content };
-}
-
-async function updateFileContent(content, sha) {
-    const updatedData = btoa(unescape(encodeURIComponent(JSON.stringify(content))));
-    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-        method: "PUT",
-        headers: {
-            "Authorization": `token ${token}`,
-            "Content-Type": "application/json",
-            "Accept": "application/vnd.github.v3+json"
-        },
-        body: JSON.stringify({ message: "Update forum data", content: updatedData, sha })
-    });
-
-    if (!response.ok) {
-        throw new Error('Failed to update file content');
-    }
-}
-document.addEventListener('DOMContentLoaded', () => {
+    // 显示发帖表单
     document.getElementById('postButton').addEventListener('click', () => {
         const postForm = document.getElementById('postForm');
         postForm.style.display = postForm.style.display === 'none' ? 'block' : 'none';
     });
 
+    // 绑定发帖表单提交事件
     document.getElementById('postFormElement').addEventListener('submit', submitPost);
-    loadPosts(1);
 
-    const replyForm = document.getElementById('replyForm');
-    if (replyForm) {
-        replyForm.addEventListener('submit', submitReply);
-    }
+    // 加载第一页帖子
+    loadPosts(1);
 });
 
-async function submitPost(event) {
-    event.preventDefault();
-    const title = document.getElementById('postTitle').value;
-    const content = document.getElementById('postContent').value;
-    const imageFile = document.getElementById('postImage').files[0];
-    const timestamp = new Date().toISOString();
-    const id = generateUniqueId();
-    let imageUrl = '';
-
-    if (imageFile) {
-        try {
-            imageUrl = await uploadImage(imageFile);
-        } catch (error) {
-            console.error('Error uploading image:', error.message);
-            return;
-        }
-    }
-
-    const newPost = { id, title, content, imageUrl, timestamp, replies: [] };
-
-    try {
-        let { sha, content: fileContent } = await getFileContent();
-        fileContent.push(newPost);
-        await updateFileContent(fileContent, sha);
-        loadPosts();
-
-        document.getElementById('postTitle').value = '';
-        document.getElementById('postContent').value = '';
-        document.getElementById('postImage').value = '';
-    } catch (error) {
-        console.error('Error in submitPost:', error.message);
-    }
-}
-
-async function uploadImage(imageFile) {
-    const formData = new FormData();
-    formData.append('file', imageFile);
-    formData.append('message', 'Upload post image');
-    formData.append('branch', 'main');
-
-    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/images/${imageFile.name}`, {
-        method: 'PUT',
-        headers: {
-            'Authorization': `token ${token}`,
-            'Accept': 'application/vnd.github.v3+json'
-        },
-        body: JSON.stringify({
-            message: 'Upload post image',
-            content: await toBase64(imageFile),
-            branch: 'main'
-        })
-    });
-
-    if (!response.ok) {
-        throw new Error('Failed to upload image');
-    }
-
-    const data = await response.json();
-    return data.content.download_url;
-}
-
-function toBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = error => reject(error);
-    });
-}
-// Generate unique ID
+// 生成唯一ID
 function generateUniqueId() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
 
-// Load posts list and sort by latest activity
+// 加载帖子列表并按时间排序
 async function loadPosts(page = 1, pageSize = 10) {
     const loadingMessage = document.getElementById('loadingMessage');
     const postsContainer = document.getElementById('posts');
     loadingMessage.style.display = 'block';
-    postsContainer.innerHTML = '';  // Clear old posts
+    postsContainer.innerHTML = '';  // 清空旧的帖子
 
     try {
-        let { content: posts } = await getFileContent();
-        // Sort posts by latest activity (post creation or latest reply)
-        posts.sort((a, b) => {
+        const { content } = await getFileContent();
+
+        // 按最新发帖或回复时间排序
+        content.sort((a, b) => {
             const lastActivityA = a.replies.length ? new Date(a.replies[a.replies.length - 1].timestamp) : new Date(a.timestamp);
             const lastActivityB = b.replies.length ? new Date(b.replies[b.replies.length - 1].timestamp) : new Date(b.timestamp);
             return lastActivityB - lastActivityA;
         });
 
+        // 分页处理
+        const totalPosts = content.length;
+        const totalPages = Math.ceil(totalPosts / pageSize);
         const start = (page - 1) * pageSize;
-        const end = start + pageSize;
-        const paginatedPosts = posts.slice(start, end);
+        const end = page * pageSize;
+        const postsToShow = content.slice(start, end);
 
-        displayPosts(paginatedPosts);
-        setupPagination(Math.ceil(posts.length / pageSize), page);
+        displayPosts(postsToShow);
+        setupPagination(totalPages, page);
     } catch (error) {
-        console.error('Error in loadPosts:', error.message);
+        console.error('Error:', error.message);
     } finally {
         loadingMessage.style.display = 'none';
     }
 }
-
-// Display post titles
+// 显示帖子标题
 function displayPosts(posts) {
     const postsContainer = document.getElementById('posts');
-    postsContainer.innerHTML = '';  // Clear old posts
+    postsContainer.innerHTML = '';  // 清空旧的帖子
 
     posts.forEach((post) => {
         const postElement = document.createElement('div');
@@ -274,13 +60,12 @@ function displayPosts(posts) {
         postElement.innerHTML = `
             <a href="post.html?id=${post.id}" class="post-title">${post.title}</a>
             <div class="timestamp">${new Date(post.timestamp).toLocaleString()}</div>
-            ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Post Image" class="post-image">` : ''}
         `;
         postsContainer.appendChild(postElement);
     });
 }
 
-// Setup pagination controls
+// 设置分页控件
 function setupPagination(totalPages, currentPage) {
     const paginationContainer = document.getElementById('pagination');
     paginationContainer.innerHTML = '';
@@ -289,6 +74,7 @@ function setupPagination(totalPages, currentPage) {
         const pageLink = document.createElement('button');
         pageLink.textContent = i;
 
+        // 确保只有在 currentPage 有值时才添加 'active' 类
         if (i === currentPage) {
             pageLink.classList.add('active');
         }
@@ -298,40 +84,130 @@ function setupPagination(totalPages, currentPage) {
     }
 }
 
-// Load post details
-// Load post details and display image if exists
+// 加载帖子详情
 async function loadPostDetail(postId) {
     try {
-        let { content: posts } = await getFileContent();
-        const post = posts.find(p => p.id === postId);
+        const { content } = await getFileContent();
+        const post = content.find(p => p.id === postId);
 
-        if (post) {
-            document.getElementById('postTitle').textContent = post.title;
-            document.getElementById('postContent').textContent = post.content;
-            document.getElementById('postTimestamp').textContent = new Date(post.timestamp).toLocaleString();
-            if (post.imageUrl) {
-                const postImage = document.createElement('img');
-                postImage.src = post.imageUrl;
-                postImage.alt = 'Post Image';
-                postImage.classList.add('post-image');
-                document.getElementById('postContent').appendChild(postImage);
-            }
-            displayReplies(post.replies);
-        } else {
-            console.error('Post not found');
+        if (!post) {
+            throw new Error("Post not found");
         }
+
+        document.getElementById('postTitle').textContent = post.title;
+        document.getElementById('postContent').textContent = post.content;
+        document.getElementById('postTimestamp').textContent = new Date(post.timestamp).toLocaleString();
+
+        // 显示回复
+        displayReplies(post.replies);
+
     } catch (error) {
-        console.error('Error in loadPostDetail:', error.message);
+        console.error('Error:', error.message);
     }
 }
-// Display replies
-async function displayReplies(replies) {
+
+// 显示回复
+function displayReplies(replies) {
     const repliesContainer = document.getElementById('replies');
     repliesContainer.innerHTML = '';
 
+    // 按时间先后排序回复
     replies.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
+    replies.forEach((reply, index) => {
+        const replyElement = document.createElement('div');
+        replyElement.classList.add('reply');
+        replyElement.innerHTML = `
+            ${index + 1}楼: ${reply.content}
+            <span class="reply-timestamp">${new Date(reply.timestamp).toLocaleString()}</span>
+        `;
+        repliesContainer.appendChild(replyElement);
+    });
+}
+// 获取用户IP地址
+async function getUserIP() {
+    const response = await fetch('https://api.ipify.org?format=json');
+    const data = await response.json();
+    return data.ip;
+}
+
+// 处理点赞
+async function handleLike(event) {
+    const replyIndex = event.target.getAttribute('data-reply-index');
+    const postId = new URLSearchParams(window.location.search).get('id');
     const userIP = await getUserIP();
+
+    try {
+        let { sha, content: fileContent } = await getFileContent();
+        const post = fileContent.find(p => p.id === postId);
+        const reply = post.replies[replyIndex];
+
+        // 检查是否已经点赞
+        if (reply.likedIPs && reply.likedIPs.includes(userIP)) {
+            // 取消点赞
+            reply.likes -= 1;
+            reply.likedIPs = reply.likedIPs.filter(ip => ip !== userIP);
+        } else {
+            // 检查是否已经点踩
+            if (reply.dislikedIPs && reply.dislikedIPs.includes(userIP)) {
+                alert('您已经点踩过该回复，不能点赞');
+                return;
+            }
+            // 更新点赞数和IP地址
+            reply.likes = (reply.likes || 0) + 1;
+            reply.likedIPs = reply.likedIPs || [];
+            reply.likedIPs.push(userIP);
+        }
+
+        await updateFileContent(fileContent, sha);
+        loadPostDetail(postId);  // 重新加载帖子详情以更新显示
+    } catch (error) {
+        console.error('Error in handleLike:', error.message);
+    }
+}
+
+// 处理点踩
+async function handleDislike(event) {
+    const replyIndex = event.target.getAttribute('data-reply-index');
+    const postId = new URLSearchParams(window.location.search).get('id');
+    const userIP = await getUserIP();
+
+    try {
+        let { sha, content: fileContent } = await getFileContent();
+        const post = fileContent.find(p => p.id === postId);
+        const reply = post.replies[replyIndex];
+
+        // 检查是否已经点踩
+        if (reply.dislikedIPs && reply.dislikedIPs.includes(userIP)) {
+            // 取消点踩
+            reply.dislikes -= 1;
+            reply.dislikedIPs = reply.dislikedIPs.filter(ip => ip !== userIP);
+        } else {
+            // 检查是否已经点赞
+            if (reply.likedIPs && reply.likedIPs.includes(userIP)) {
+                alert('您已经点赞过该回复，不能点踩');
+                return;
+            }
+            // 更新点踩数和IP地址
+            reply.dislikes = (reply.dislikes || 0) + 1;
+            reply.dislikedIPs = reply.dislikedIPs || [];
+            reply.dislikedIPs.push(userIP);
+        }
+
+        await updateFileContent(fileContent, sha);
+        loadPostDetail(postId);  // 重新加载帖子详情以更新显示
+    } catch (error) {
+        console.error('Error in handleDislike:', error.message);
+    }
+}
+
+// 显示回复
+function displayReplies(replies) {
+    const repliesContainer = document.getElementById('replies');
+    repliesContainer.innerHTML = '';
+
+    // 按时间先后排序回复
+    replies.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
     replies.forEach((reply, index) => {
         const replyElement = document.createElement('div');
@@ -343,16 +219,9 @@ async function displayReplies(replies) {
             <button class="dislike-button" data-reply-index="${index}">Dislike (${reply.dislikes || 0})</button>
         `;
         repliesContainer.appendChild(replyElement);
-
-        // Set button color based on user interaction
-        if (reply.likedIPs && reply.likedIPs.includes(userIP)) {
-            replyElement.querySelector('.like-button').style.backgroundColor = 'green';
-        }
-        if (reply.dislikedIPs && reply.dislikedIPs.includes(userIP)) {
-            replyElement.querySelector('.dislike-button').style.backgroundColor = 'green';
-        }
     });
 
+    // 添加事件监听器
     document.querySelectorAll('.like-button').forEach(button => {
         button.addEventListener('click', handleLike);
     });
@@ -362,324 +231,106 @@ async function displayReplies(replies) {
     });
 }
 
-// Get user IP address
-async function getUserIP() {
-    const response = await fetch('https://api.ipify.org?format=json');
-    const data = await response.json();
-    return data.ip;
+// 显示回复
+function displayReplies(replies) {
+    const repliesContainer = document.getElementById('replies');
+    repliesContainer.innerHTML = '';
+
+    // 按时间先后排序回复
+    replies.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    replies.forEach((reply, index) => {
+        const replyElement = document.createElement('div');
+        replyElement.classList.add('reply');
+        replyElement.innerHTML = `
+            ${index + 1}楼: ${reply.content}
+            <span class="reply-timestamp">${new Date(reply.timestamp).toLocaleString()}</span>
+            <button class="like-button" data-reply-index="${index}">Like (${reply.likes || 0})</button>
+            <button class="dislike-button" data-reply-index="${index}">Dislike (${reply.dislikes || 0})</button>
+        `;
+        repliesContainer.appendChild(replyElement);
+    });
+
+    // 添加事件监听器
+    document.querySelectorAll('.like-button').forEach(button => {
+        button.addEventListener('click', handleLike);
+    });
+
+    document.querySelectorAll('.dislike-button').forEach(button => {
+        button.addEventListener('click', handleDislike);
+    });
 }
 
-// Handle like
-async function handleLike(event) {
-    const button = event.target;
-    const replyIndex = button.getAttribute('data-reply-index');
-    const postId = new URLSearchParams(window.location.search).get('id');
-    const userIP = await getUserIP();
+// 显示回复
+function displayReplies(replies) {
+    const repliesContainer = document.getElementById('replies');
+    repliesContainer.innerHTML = '';
 
-    try {
-        let { sha, content: fileContent } = await getFileContent();
-        const post = fileContent.find(p => p.id === postId);
-        const reply = post.replies[replyIndex];
+    // 按时间先后排序回复
+    replies.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
-        if (reply.likedIPs && reply.likedIPs.includes(userIP)) {
-            // If already liked, remove the like
-            reply.likes -= 1;
-            reply.likedIPs = reply.likedIPs.filter(ip => ip !== userIP);
-        } else {
-            // If disliked, remove the dislike
-            if (reply.dislikedIPs && reply.dislikedIPs.includes(userIP)) {
-                reply.dislikes -= 1;
-                reply.dislikedIPs = reply.dislikedIPs.filter(ip => ip !== userIP);
-            }
-            // Add the like
-            reply.likes = (reply.likes || 0) + 1;
-            reply.likedIPs = reply.likedIPs || [];
-            reply.likedIPs.push(userIP);
-        }
-        button.style.backgroundColor = 'green'; // Change button color to green
+    replies.forEach((reply, index) => {
+        const replyElement = document.createElement('div');
+        replyElement.classList.add('reply');
+        replyElement.innerHTML = `
+            ${index + 1}楼: ${reply.content}
+            <span class="reply-timestamp">${new Date(reply.timestamp).toLocaleString()}</span>
+            <button class="like-button" data-reply-index="${index}">Like (${reply.likes || 0})</button>
+            <button class="dislike-button" data-reply-index="${index}">Dislike (${reply.dislikes || 0})</button>
+        `;
+        repliesContainer.appendChild(replyElement);
+    });
 
-        await updateFileContent(fileContent, sha);
-        loadPostDetail(postId);
-    } catch (error) {
-        console.error('Error in handleLike:', error.message);
-    }
+    // 添加事件监听器
+    document.querySelectorAll('.like-button').forEach(button => {
+        button.addEventListener('click', handleLike);
+    });
+
+    document.querySelectorAll('.dislike-button').forEach(button => {
+        button.addEventListener('click', handleDislike);
+    });
 }
-
-// Handle dislike
-async function handleDislike(event) {
-    const button = event.target;
-    const replyIndex = button.getAttribute('data-reply-index');
-    const postId = new URLSearchParams(window.location.search).get('id');
-    const userIP = await getUserIP();
-
-    try {
-        let { sha, content: fileContent } = await getFileContent();
-        const post = fileContent.find(p => p.id === postId);
-        const reply = post.replies[replyIndex];
-
-        if (reply.dislikedIPs && reply.dislikedIPs.includes(userIP)) {
-            // If already disliked, remove the dislike
-            reply.dislikes -= 1;
-            reply.dislikedIPs = reply.dislikedIPs.filter(ip => ip !== userIP);
-        } else {
-            // If liked, remove the like
-            if (reply.likedIPs && reply.likedIPs.includes(userIP)) {
-                reply.likes -= 1;
-                reply.likedIPs = reply.likedIPs.filter(ip => ip !== userIP);
-            }
-            // Add the dislike
-            reply.dislikes = (reply.dislikes || 0) + 1;
-            reply.dislikedIPs = reply.dislikedIPs || [];
-            reply.dislikedIPs.push(userIP);
-        }
-        button.style.backgroundColor = 'green'; // Change button color to green
-
-        await updateFileContent(fileContent, sha);
-        loadPostDetail(postId);
-    } catch (error) {
-        console.error('Error in handleDislike:', error.message);
-    }
-}
-
-// Handle post submission
+// 处理发帖提交
 async function submitPost(event) {
-    event.preventDefault();  // Prevent default form submission behavior
+    event.preventDefault();  // 阻止表单的默认提交行为
     const title = document.getElementById('postTitle').value;
     const content = document.getElementById('postContent').value;
-    const imageFile = document.getElementById('postImage').files[0];
     const timestamp = new Date().toISOString();
     const id = generateUniqueId();
-    let imageUrl = '';
-
-    if (imageFile) {
-        try {
-            imageUrl = await uploadImage(imageFile);
-            console.log("Image uploaded successfully:", imageUrl);  // Debug log
-        } catch (error) {
-            console.error('Error uploading image:', error.message);  // Output error message
-            return;  // Stop execution if image upload fails
-        }
-    }
-
-    const newPost = { id, title, content, imageUrl, timestamp, replies: [] };
+    const newPost = { id, title, content, timestamp, replies: [] };
 
     try {
         let { sha, content: fileContent } = await getFileContent();
         fileContent.push(newPost);
         await updateFileContent(fileContent, sha);
-        loadPosts();  // Refresh post list
+        loadPosts();  // 刷新帖子列表
 
-        // Clear form
+        // 清空表单
         document.getElementById('postTitle').value = '';
         document.getElementById('postContent').value = '';
-        document.getElementById('postImage').value = '';
     } catch (error) {
-        console.error('Error in submitPost:', error.message);  // Output error message
+        console.error('Error:', error.message);
     }
 }
 
-// Handle reply submission
-document.getElementById('replyForm').addEventListener('submit', submitReply);
-
-async function submitReply(event) {
-    event.preventDefault();  // Prevent default form submission behavior
+// 处理回复提交
+document.getElementById('replyForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
     const replyContent = document.getElementById('replyInput').value;
-    const postId = new URLSearchParams(window.location.search).get('id');  // Get post ID from URL
+    const postId = new URLSearchParams(window.location.search).get('id');
     const timestamp = new Date().toISOString();
-    const userIP = await getUserIP();
-
-    const newReply = { content: replyContent, timestamp, likedIPs: [], dislikedIPs: [] };
+    const newReply = { content: replyContent, timestamp };
 
     try {
         let { sha, content: fileContent } = await getFileContent();
         const post = fileContent.find(p => p.id === postId);
         post.replies.push(newReply);
         await updateFileContent(fileContent, sha);
-        loadPostDetail(postId);  // Refresh post details
+        loadPostDetail(postId);  // 刷新帖子详情
 
-        // Clear form
+        // 清空回复表单
         document.getElementById('replyInput').value = '';
     } catch (error) {
-        console.error('Error in submitReply:', error.message);
+        console.error('Error:', error.message);
     }
-}
-async function createFolderIfNotExists(owner, repo, path, token) {
-    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-    const response = await fetch(url, {
-        headers: {
-            'Authorization': `token ${token}`,
-            'Accept': 'application/vnd.github.v3+json'
-        }
-    });
-
-    if (response.status === 404) {
-        // Folder does not exist, create it
-        const createResponse = await fetch(url, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${token}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                message: `Create ${path} folder`,
-                content: btoa(''), // Empty content for folder
-                branch: 'main'
-            })
-        });
-
-        if (!createResponse.ok) {
-            throw new Error('Failed to create folder');
-        }
-    } else if (!response.ok) {
-        throw new Error('Failed to check folder existence');
-    }
-}
-
-async function uploadImage(imageFile) {
-    const owner = 'Huamin-Wang';
-    const repo = 'aboutme';
-    const token = 'YOUR_GITHUB_TOKEN'; // Replace with your actual token
-    const path = 'posts'; // Store images in the same location as text content
-
-    // Ensure the posts folder exists
-    await createFolderIfNotExists(owner, repo, path, token);
-
-    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}/${imageFile.name}`;
-    const response = await fetch(url, {
-        method: 'PUT',
-        headers: {
-            'Authorization': `token ${token}`,
-            'Accept': 'application/vnd.github.v3+json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            message: 'Upload post image',
-            content: await toBase64(imageFile),
-            branch: 'main'
-        })
-    });
-
-    if (!response.ok) {
-        throw new Error('Failed to upload image');
-    }
-
-    const data = await response.json();
-    return data.content.download_url;
-}
-
-function toBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = error => reject(error);
-    });
-}async function createFolderIfNotExists(owner, repo, path, token) {
-    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-    const response = await fetch(url, {
-        headers: {
-            'Authorization': `token ${token}`,
-            'Accept': 'application/vnd.github.v3+json'
-        }
-    });
-
-    if (response.status === 404) {
-        // Folder does not exist, create it
-        const createResponse = await fetch(url, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${token}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                message: `Create ${path} folder`,
-                content: btoa(''), // Empty content for folder
-                branch: 'main'
-            })
-        });
-
-        if (!createResponse.ok) {
-            throw new Error('Failed to create folder');
-        }
-    } else if (!response.ok) {
-        throw new Error('Failed to check folder existence');
-    }
-}
-
-async function uploadImage(imageFile) {
-    const owner = 'Huamin-Wang';
-    const repo = 'aboutme';
-    const token = 'YOUR_GITHUB_TOKEN'; // Replace with your actual token
-    const path = 'posts'; // Store images in the same location as text content
-
-    // Ensure the posts folder exists
-    await createFolderIfNotExists(owner, repo, path, token);
-
-    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}/${imageFile.name}`;
-    const response = await fetch(url, {
-        method: 'PUT',
-        headers: {
-            'Authorization': `token ${token}`,
-            'Accept': 'application/vnd.github.v3+json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            message: 'Upload post image',
-            content: await toBase64(imageFile),
-            branch: 'main'
-        })
-    });
-
-    if (!response.ok) {
-        throw new Error('Failed to upload image');
-    }
-
-    const data = await response.json();
-    return data.content.download_url;
-}
-
-function toBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = error => reject(error);
-    });
-}
-
-async function submitPost(event) {
-    event.preventDefault();  // Prevent default form submission behavior
-    const title = document.getElementById('postTitle').value;
-    const content = document.getElementById('postContent').value;
-    const imageFile = document.getElementById('postImage').files[0];
-    const timestamp = new Date().toISOString();
-    const id = generateUniqueId();
-    let imageUrl = '';
-
-    if (imageFile) {
-        try {
-            imageUrl = await uploadImage(imageFile);
-        } catch (error) {
-            console.error('Error uploading image:', error.message);
-            return;
-        }
-    }
-
-    const newPost = { id, title, content, imageUrl, timestamp, replies: [] };
-
-    try {
-        let { sha, content: fileContent } = await getFileContent();
-        fileContent.push(newPost);
-        await updateFileContent(fileContent, sha);
-        loadPosts();  // Refresh post list
-
-        // Clear form
-        document.getElementById('postTitle').value = '';
-        document.getElementById('postContent').value = '';
-        document.getElementById('postImage').value = '';
-    } catch (error) {
-        console.error('Error in submitPost:', error.message);
-    }
-}
+});

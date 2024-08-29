@@ -7,30 +7,20 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="main-content">
-        <div class="container">
-            <h1>说出你的故事</h1>
-            <button id="postButton">发布新帖子</button>
-            <div id="postForm" style="display: none;">
-                <form id="postFormElement">
-                    <input type="text" id="postTitle" placeholder="帖子标题" required>
-                    <textarea id="postContent" placeholder="帖子内容" required></textarea>
-                    <input type="file" id="postImage" accept="image/*">
-                    <button type="submit">发帖</button>
-                </form>
-            </div>
-            <h2>美好的皮囊千篇一律，有趣的灵魂万里挑一</h2>
-            <div id="loadingMessage" style="display: none;">加载中，稍等...</div>
-            <div id="posts"></div>
-            <div id="pagination"></div>
+    <div class="container">
+        <h1>说出你的故事</h1>
+        <button id="postButton">发布新帖子</button>
+        <div id="postForm" style="display: none;">
+            <form id="postFormElement">
+                <input type="text" id="postTitle" placeholder="帖子标题" required>
+                <textarea id="postContent" placeholder="帖子内容" required></textarea>
+                <button type="submit">发帖</button>
+            </form>
         </div>
-    </div>
-
-    <div class="sidebar">
-        <h2>公告区</h2>
-        <p>欢迎来到哔哔赖赖论坛！</p>
-        <p>请遵守社区规则，文明发言。</p>
-        <p>最新活动：分享你的故事，赢取奖品！</p>
+        <h2>美好的皮囊千篇一律，有趣的灵魂万里挑一</h2>
+        <div id="loadingMessage" style="display: none;">加载中，稍等...</div>
+        <div id="posts"></div>
+        <div id="pagination"></div>
     </div>
 
     <script src="api.js"></script>

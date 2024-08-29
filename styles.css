@@ -1,38 +1,17 @@
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f7f7f7;
-    background-image: url('img/school.jpg'); /* Add background image */
-    background-size: cover; /* Ensure the image covers the entire page */
-    background-attachment: fixed; /* Fix the background image */
     margin: 0;
     padding: 0;
     color: #333;
-    display: flex;
-    flex-direction: column;
-}
-.post img {
-    max-width: 100%; /* Ensure the image does not exceed the container width */
-    height: auto; /* Maintain aspect ratio */
-    display: block;
-    margin: 10px auto; /* Center the image */
-    border-radius: 5px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-.main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
 }
 
 .container {
     max-width: 800px;
     margin: 30px auto;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.9); /* Add transparency to the container */
+    background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
 }
 
 h1 {
@@ -152,38 +131,4 @@ h2 {
 
 #pagination button:hover {
     background-color: #45a049;
-}
-
-.sidebar {
-    width: 80%; /* Reduced width */
-    background-color: #f9f9f9;
-    padding: 5px; /* Reduced padding */
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1); /* Reduced shadow */
-    border-radius: 3px; /* Reduced border radius */
-    margin-top: 10px;
-    font-size: 12px; /* Reduced font size */
-    position: fixed; /* Make it a floating box */
-    bottom: 20px; /* Position it at the bottom */
-    right: 20px; /* Position it at the right */
-    z-index: 1000; /* Ensure it is above other elements */
-}
-
-.sidebar h2 {
-    font-size: 16px; /* Reduced font size */
-    color: #333;
-    margin-bottom: 5px;
-}
-
-.sidebar p {
-    font-size: 12px; /* Reduced font size */
-    color: #555;
-    margin-bottom: 5px;
-}
-
-@media (min-width: 768px) {
-    .sidebar {
-        width: 250px; /* Set a fixed width for larger screens */
-        bottom: 20px; /* Position it at the bottom */
-        right: 20px; /* Position it at the right */
-    }
 }
