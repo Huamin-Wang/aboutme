@@ -1,5 +1,5 @@
 const owner = "Huamin-Wang";  // 替换为你的 GitHub 用户名
-const repo = "WeChatData";    // 替换为你的仓库名称
+const repo = "aboutme";    // 替换为你的仓库名称
 const path = "data/forumData.json";  // 你想要存储数据的路径
 const part1 = "ghp_HFIHIxsG2lM";
 const part2 = "6q8uHZPkA6iiu6UJNOb1Fz1GC";
