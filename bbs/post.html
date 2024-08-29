@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帖子详情</title>
+    <link rel="stylesheet" href="styles.css"> <!-- 添加这行来引入外部CSS文件 -->
+</head>
+<body>
+    <div class="container">
+        <h1 id="postTitle"></h1>
+        <div id="postContent"></div>
+        <div class="timestamp" id="postTimestamp"></div>
+
+        <h4>回复：</h4>
+        <div id="replies"></div>
+
+        <form id="replyForm">
+            <input type="text" placeholder="回复内容" id="replyInput" required>
+            <button type="submit">回复</button>
+        </form>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="forum.js"></script>
+    <script>
+        const postId = new URLSearchParams(window.location.search).get('id');  // 从 URL 获取帖子 ID
+        loadPostDetail(postId);  // 加载帖子详情
+    </script>
+</body>
+</html>
