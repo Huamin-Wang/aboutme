@@ -19,6 +19,11 @@ function generateUniqueId() {
 
 // 加载帖子列表并按时间排序
 async function loadPosts(page = 1, pageSize = 10) {
+    const loadingMessage = document.getElementById('loadingMessage');
+    const postsContainer = document.getElementById('posts');
+    loadingMessage.style.display = 'block';
+    postsContainer.innerHTML = '';  // 清空旧的帖子
+
     try {
         const { content } = await getFileContent();
 
@@ -38,9 +43,10 @@ async function loadPosts(page = 1, pageSize = 10) {
 
         displayPosts(postsToShow);
         setupPagination(totalPages, page);
-
     } catch (error) {
         console.error('Error:', error.message);
+    } finally {
+        loadingMessage.style.display = 'none';
     }
 }
 // 显示帖子标题
@@ -118,7 +124,172 @@ function displayReplies(replies) {
         repliesContainer.appendChild(replyElement);
     });
 }
+// 获取用户IP地址
+async function getUserIP() {
+    const response = await fetch('https://api.ipify.org?format=json');
+    const data = await response.json();
+    return data.ip;
+}
 
+// 处理点赞
+async function handleLike(event) {
+    const replyIndex = event.target.getAttribute('data-reply-index');
+    const postId = new URLSearchParams(window.location.search).get('id');
+    const userIP = await getUserIP();
+
+    try {
+        let { sha, content: fileContent } = await getFileContent();
+        const post = fileContent.find(p => p.id === postId);
+        const reply = post.replies[replyIndex];
+
+        // 检查是否已经点赞
+        if (reply.likedIPs && reply.likedIPs.includes(userIP)) {
+            // 取消点赞
+            reply.likes -= 1;
+            reply.likedIPs = reply.likedIPs.filter(ip => ip !== userIP);
+        } else {
+            // 检查是否已经点踩
+            if (reply.dislikedIPs && reply.dislikedIPs.includes(userIP)) {
+                alert('您已经点踩过该回复，不能点赞');
+                return;
+            }
+            // 更新点赞数和IP地址
+            reply.likes = (reply.likes || 0) + 1;
+            reply.likedIPs = reply.likedIPs || [];
+            reply.likedIPs.push(userIP);
+        }
+
+        await updateFileContent(fileContent, sha);
+        loadPostDetail(postId);  // 重新加载帖子详情以更新显示
+    } catch (error) {
+        console.error('Error in handleLike:', error.message);
+    }
+}
+
+// 处理点踩
+async function handleDislike(event) {
+    const replyIndex = event.target.getAttribute('data-reply-index');
+    const postId = new URLSearchParams(window.location.search).get('id');
+    const userIP = await getUserIP();
+
+    try {
+        let { sha, content: fileContent } = await getFileContent();
+        const post = fileContent.find(p => p.id === postId);
+        const reply = post.replies[replyIndex];
+
+        // 检查是否已经点踩
+        if (reply.dislikedIPs && reply.dislikedIPs.includes(userIP)) {
+            // 取消点踩
+            reply.dislikes -= 1;
+            reply.dislikedIPs = reply.dislikedIPs.filter(ip => ip !== userIP);
+        } else {
+            // 检查是否已经点赞
+            if (reply.likedIPs && reply.likedIPs.includes(userIP)) {
+                alert('您已经点赞过该回复，不能点踩');
+                return;
+            }
+            // 更新点踩数和IP地址
+            reply.dislikes = (reply.dislikes || 0) + 1;
+            reply.dislikedIPs = reply.dislikedIPs || [];
+            reply.dislikedIPs.push(userIP);
+        }
+
+        await updateFileContent(fileContent, sha);
+        loadPostDetail(postId);  // 重新加载帖子详情以更新显示
+    } catch (error) {
+        console.error('Error in handleDislike:', error.message);
+    }
+}
+
+// 显示回复
+function displayReplies(replies) {
+    const repliesContainer = document.getElementById('replies');
+    repliesContainer.innerHTML = '';
+
+    // 按时间先后排序回复
+    replies.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    replies.forEach((reply, index) => {
+        const replyElement = document.createElement('div');
+        replyElement.classList.add('reply');
+        replyElement.innerHTML = `
+            ${index + 1}楼: ${reply.content}
+            <span class="reply-timestamp">${new Date(reply.timestamp).toLocaleString()}</span>
+            <button class="like-button" data-reply-index="${index}">Like (${reply.likes || 0})</button>
+            <button class="dislike-button" data-reply-index="${index}">Dislike (${reply.dislikes || 0})</button>
+        `;
+        repliesContainer.appendChild(replyElement);
+    });
+
+    // 添加事件监听器
+    document.querySelectorAll('.like-button').forEach(button => {
+        button.addEventListener('click', handleLike);
+    });
+
+    document.querySelectorAll('.dislike-button').forEach(button => {
+        button.addEventListener('click', handleDislike);
+    });
+}
+
+// 显示回复
+function displayReplies(replies) {
+    const repliesContainer = document.getElementById('replies');
+    repliesContainer.innerHTML = '';
+
+    // 按时间先后排序回复
+    replies.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    replies.forEach((reply, index) => {
+        const replyElement = document.createElement('div');
+        replyElement.classList.add('reply');
+        replyElement.innerHTML = `
+            ${index + 1}楼: ${reply.content}
+            <span class="reply-timestamp">${new Date(reply.timestamp).toLocaleString()}</span>
+            <button class="like-button" data-reply-index="${index}">Like (${reply.likes || 0})</button>
+            <button class="dislike-button" data-reply-index="${index}">Dislike (${reply.dislikes || 0})</button>
+        `;
+        repliesContainer.appendChild(replyElement);
+    });
+
+    // 添加事件监听器
+    document.querySelectorAll('.like-button').forEach(button => {
+        button.addEventListener('click', handleLike);
+    });
+
+    document.querySelectorAll('.dislike-button').forEach(button => {
+        button.addEventListener('click', handleDislike);
+    });
+}
+
+// 显示回复
+function displayReplies(replies) {
+    const repliesContainer = document.getElementById('replies');
+    repliesContainer.innerHTML = '';
+
+    // 按时间先后排序回复
+    replies.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    replies.forEach((reply, index) => {
+        const replyElement = document.createElement('div');
+        replyElement.classList.add('reply');
+        replyElement.innerHTML = `
+            ${index + 1}楼: ${reply.content}
+            <span class="reply-timestamp">${new Date(reply.timestamp).toLocaleString()}</span>
+            <button class="like-button" data-reply-index="${index}">Like (${reply.likes || 0})</button>
+            <button class="dislike-button" data-reply-index="${index}">Dislike (${reply.dislikes || 0})</button>
+        `;
+        repliesContainer.appendChild(replyElement);
+    });
+
+    // 添加事件监听器
+    document.querySelectorAll('.like-button').forEach(button => {
+        button.addEventListener('click', handleLike);
+    });
+
+    document.querySelectorAll('.dislike-button').forEach(button => {
+        button.addEventListener('click', handleDislike);
+    });
+}
 // 处理发帖提交
 async function submitPost(event) {
     event.preventDefault();  // 阻止表单的默认提交行为
