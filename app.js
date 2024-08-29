@@ -2,14 +2,23 @@
 document.getElementById('postForm').addEventListener('submit', (event) => {
     event.preventDefault();
     console.log("Submit post form triggered");  // 添加调试日志
-    submitPost();
+    submitPost(event);
 });
 
-async function submitPost() {
+async function submitPost(event) {
+    event.preventDefault();  // 阻止表单的默认提交行为
     const title = document.getElementById('postTitle').value;
     const content = document.getElementById('postContent').value;
+    const imageFile = document.getElementById('postImage').files[0];
     const timestamp = new Date().toISOString();
-    const newPost = { title, content, timestamp, replies: [] };
+    const id = generateUniqueId();
+    let imageUrl = '';
+
+    if (imageFile) {
+        imageUrl = await uploadImage(imageFile);
+    }
+
+    const newPost = { id, title, content, imageUrl, timestamp, replies: [] };
 
     try {
         console.log("Fetching file content...");  // 添加调试日志
@@ -21,6 +30,11 @@ async function submitPost() {
         await updateFileContent(fileContent, sha);
         console.log("File content updated");  // 添加调试日志
         loadPosts();  // 刷新帖子列表
+
+        // 清空表单
+        document.getElementById('postTitle').value = '';
+        document.getElementById('postContent').value = '';
+        document.getElementById('postImage').value = '';
     } catch (error) {
         console.error('Error in submitPost:', error.message);  // 输出错误信息
     }
@@ -72,4 +86,31 @@ async function updateFileContent(content, sha) {
         console.error('Error in updateFileContent:', error.message);  // 输出错误信息
         throw error;  // 重新抛出错误以在上层捕获
     }
+}
+
+async function uploadImage(imageFile) {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+    formData.append('message', 'Upload post image');
+    formData.append('branch', 'main');
+
+    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/images/${imageFile.name}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json'
+        },
+        body: formData
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to upload image');
+    }
+
+    const data = await response.json();
+    return data.content.download_url;
+}
+
+function generateUniqueId() {
+    return '_' + Math.random().toString(36).substr(2, 9);
 }
