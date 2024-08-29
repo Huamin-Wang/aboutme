@@ -81,7 +81,6 @@ async function submitPost(event) {
         console.error('Error in submitPost:', error.message);
     }
 }
-
 async function uploadImage(imageFile) {
     const formData = new FormData();
     formData.append('file', imageFile);
@@ -504,18 +503,55 @@ async function submitReply(event) {
         console.error('Error in submitReply:', error.message);
     }
 }
-
-async function uploadImage(imageFile) {
-    const formData = new FormData();
-    formData.append('file', imageFile);
-    formData.append('message', 'Upload post image');
-    formData.append('branch', 'main');
-
-    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/images/${imageFile.name}`, {
-        method: 'PUT',
+async function createFolderIfNotExists(owner, repo, path, token) {
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+    const response = await fetch(url, {
         headers: {
             'Authorization': `token ${token}`,
             'Accept': 'application/vnd.github.v3+json'
+        }
+    });
+
+    if (response.status === 404) {
+        // Folder does not exist, create it
+        const createResponse = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: `Create ${path} folder`,
+                content: btoa(''), // Empty content for folder
+                branch: 'main'
+            })
+        });
+
+        if (!createResponse.ok) {
+            throw new Error('Failed to create folder');
+        }
+    } else if (!response.ok) {
+        throw new Error('Failed to check folder existence');
+    }
+}
+
+async function uploadImage(imageFile) {
+    const owner = 'Huamin-Wang';
+    const repo = 'aboutme';
+    const token = 'YOUR_GITHUB_TOKEN'; // Replace with your actual token
+    const path = 'posts'; // Store images in the same location as text content
+
+    // Ensure the posts folder exists
+    await createFolderIfNotExists(owner, repo, path, token);
+
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}/${imageFile.name}`;
+    const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             message: 'Upload post image',
@@ -539,4 +575,111 @@ function toBase64(file) {
         reader.onload = () => resolve(reader.result.split(',')[1]);
         reader.onerror = error => reject(error);
     });
+}async function createFolderIfNotExists(owner, repo, path, token) {
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+    const response = await fetch(url, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json'
+        }
+    });
+
+    if (response.status === 404) {
+        // Folder does not exist, create it
+        const createResponse = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: `Create ${path} folder`,
+                content: btoa(''), // Empty content for folder
+                branch: 'main'
+            })
+        });
+
+        if (!createResponse.ok) {
+            throw new Error('Failed to create folder');
+        }
+    } else if (!response.ok) {
+        throw new Error('Failed to check folder existence');
+    }
+}
+
+async function uploadImage(imageFile) {
+    const owner = 'Huamin-Wang';
+    const repo = 'aboutme';
+    const token = 'YOUR_GITHUB_TOKEN'; // Replace with your actual token
+    const path = 'posts'; // Store images in the same location as text content
+
+    // Ensure the posts folder exists
+    await createFolderIfNotExists(owner, repo, path, token);
+
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}/${imageFile.name}`;
+    const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            message: 'Upload post image',
+            content: await toBase64(imageFile),
+            branch: 'main'
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to upload image');
+    }
+
+    const data = await response.json();
+    return data.content.download_url;
+}
+
+function toBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = error => reject(error);
+    });
+}
+
+async function submitPost(event) {
+    event.preventDefault();  // Prevent default form submission behavior
+    const title = document.getElementById('postTitle').value;
+    const content = document.getElementById('postContent').value;
+    const imageFile = document.getElementById('postImage').files[0];
+    const timestamp = new Date().toISOString();
+    const id = generateUniqueId();
+    let imageUrl = '';
+
+    if (imageFile) {
+        try {
+            imageUrl = await uploadImage(imageFile);
+        } catch (error) {
+            console.error('Error uploading image:', error.message);
+            return;
+        }
+    }
+
+    const newPost = { id, title, content, imageUrl, timestamp, replies: [] };
+
+    try {
+        let { sha, content: fileContent } = await getFileContent();
+        fileContent.push(newPost);
+        await updateFileContent(fileContent, sha);
+        loadPosts();  // Refresh post list
+
+        // Clear form
+        document.getElementById('postTitle').value = '';
+        document.getElementById('postContent').value = '';
+        document.getElementById('postImage').value = '';
+    } catch (error) {
+        console.error('Error in submitPost:', error.message);
+    }
 }
