@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="b2f5ec8e-2d1a-4832-89df-24507bd1447f" name="更改" comment="">
+    <list default="true" id="393c2442-db14-4137-8bb3-958d2020e7ca" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/api.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,7 +17,7 @@
   "customColor": "",
   "associatedIndex": 4
 }]]></component>
-  <component name="ProjectId" id="2lMSjJR400qrAaFyXxsrxBpIKsa" />
+  <component name="ProjectId" id="2lNeKFbKIOgFgrz8gbzfoE1TPXs" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -47,12 +45,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="默认任务">
-      <changelist id="b2f5ec8e-2d1a-4832-89df-24507bd1447f" name="更改" comment="" />
-      <created>1724988587315</created>
+      <changelist id="393c2442-db14-4137-8bb3-958d2020e7ca" name="更改" comment="" />
+      <created>1725024897925</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1724988587315</updated>
-      <workItem from="1724988589612" duration="1463000" />
+      <updated>1725024897925</updated>
+      <workItem from="1725024899541" duration="316000" />
     </task>
     <servers />
   </component>

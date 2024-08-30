@@ -1,20 +1,20 @@
 // api.js
-const owner = "Huamin-Wang";
-const repo = "WeChatData";
+const owner = "wang_hua_min";
+const repo = "we-chat-data";
 const path = "data/forumData.json";
-const token = "ghp_0,m4en8O,59gyBna9c,4eSCRPBKP,118M,,,,w4GkXD3".replace(/,/g, '');
-const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+const token = "4918bb3947dbf1402d7331a65bab1b3e";
+const apiUrl = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${path}`;
 const headers = {
     "Authorization": `token ${token}`,
-    "Accept": "application/vnd.github.v3+json"
+    "Accept": "application/json"
 };
 
-async function fetchFromGitHub(url, options = {}) {
+async function fetchFromGitee(url, options = {}) {
     const response = await fetch(url, options);
     if (!response.ok) {
         const errorDetails = await response.json();
         console.error('Error details:', errorDetails);
-        throw new Error(`GitHub API request failed: ${response.status} ${response.statusText}`);
+        throw new Error(`Gitee API request failed: ${response.status} ${response.statusText}`);
     }
     return response.json();
 }
@@ -47,7 +47,7 @@ async function updateFileContent(content, sha) {
             headers: {
                 "Authorization": `token ${token}`,
                 "Content-Type": "application/json",
-                "Accept": "application/vnd.github.v3+json"
+                "Accept": "application/json"
             },
             body: JSON.stringify({ message: "Update forum data", content: updatedData, sha })
         });
