@@ -5,7 +5,7 @@
 
 ## 联系方式
 ### 1. 微信公众号
-![微信二维码](img/wechat.jpg)
+![微信二维码](img/weixin_code.png)
 
 ### 2. Gitee 地址
 [https://gitee.com/wang_hua_min](https://gitee.com/wang_hua_min)

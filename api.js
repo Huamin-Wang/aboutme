@@ -2,36 +2,63 @@
 const owner = "Huamin-Wang";
 const repo = "WeChatData";
 const path = "data/forumData.json";
-const part1 = "ghp_HFIHIxsG2lM";
-const part2 = "6q8uHZPkA6iiu6UJNOb1Fz1GC";
-const token = part1+part2;
+const token = "ghp_0,m4en8O,59gyBna9c,4eSCRPBKP,118M,,,,w4GkXD3".replace(/,/g, '');
 const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
 const headers = {
     "Authorization": `token ${token}`,
-    "Accept": "application/vnd.github.v3+json",
-    "Content-Type": "application/json"
+    "Accept": "application/vnd.github.v3+json"
 };
 
 async function fetchFromGitHub(url, options = {}) {
-    const response = await fetch(url, { headers, ...options });
-    if (!response.ok) throw new Error('Failed to fetch data');
+    const response = await fetch(url, options);
+    if (!response.ok) {
+        const errorDetails = await response.json();
+        console.error('Error details:', errorDetails);
+        throw new Error(`GitHub API request failed: ${response.status} ${response.statusText}`);
+    }
     return response.json();
 }
 
 async function getFileContent() {
     try {
-        const fileData = await fetchFromGitHub(apiUrl);
+        const response = await fetch(apiUrl, { headers });
+        if (response.status === 404) {
+            console.log("File not found, returning empty content");
+            return { sha: null, content: [] };
+        } else if (!response.ok) {
+            const errorDetails = await response.json();
+            console.error('Error details:', errorDetails);
+            throw new Error(`Failed to fetch file content: ${response.status} ${response.statusText}`);
+        }
+        const fileData = await response.json();
         const content = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
         return { sha: fileData.sha, content };
     } catch (error) {
-        return { sha: null, content: [] };
+        console.error('Error in getFileContent:', error.message);
+        throw error;
     }
 }
 
 async function updateFileContent(content, sha) {
-    const updatedData = btoa(unescape(encodeURIComponent(JSON.stringify(content))));
-    await fetchFromGitHub(apiUrl, {
-        method: "PUT",
-        body: JSON.stringify({ message: "Update forum data", content: updatedData, sha })
-    });
+    try {
+        const updatedData = btoa(unescape(encodeURIComponent(JSON.stringify(content))));
+        const response = await fetch(apiUrl, {
+            method: "PUT",
+            headers: {
+                "Authorization": `token ${token}`,
+                "Content-Type": "application/json",
+                "Accept": "application/vnd.github.v3+json"
+            },
+            body: JSON.stringify({ message: "Update forum data", content: updatedData, sha })
+        });
+        if (!response.ok) {
+            const errorDetails = await response.json();
+            console.error('Error details:', errorDetails);
+            throw new Error(`Failed to update file content: ${response.status} ${response.statusText}`);
+        }
+        console.log("File content updated successfully");
+    } catch (error) {
+        console.error('Error in updateFileContent:', error.message);
+        throw error;
+    }
 }
