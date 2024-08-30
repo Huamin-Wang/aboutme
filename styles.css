@@ -11,9 +11,12 @@ body {
     margin: 30px auto;
     padding: 20px;
     background-color: #fff;
+
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
+.header{
+     background-image: url('img/学校大门.png');
+}
 h1 {
     text-align: center;
     color: #333;
