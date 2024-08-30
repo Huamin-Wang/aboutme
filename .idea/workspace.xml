@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2f5ec8e-2d1a-4832-89df-24507bd1447f" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/postDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/postDetail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/postForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/postForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/postList.js" beforeDir="false" afterPath="$PROJECT_DIR$/postList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +52,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1724988587315</updated>
-      <workItem from="1724988589612" duration="1136000" />
+      <workItem from="1724988589612" duration="1463000" />
     </task>
     <servers />
   </component>
