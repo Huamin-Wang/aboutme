@@ -171,6 +171,7 @@ async function handleDislike(event) {
     await handleReaction(event, 'dislike');
 }
 
+// postDetail.js
 async function handleReaction(event, type) {
     const replyIndex = event.target.getAttribute('data-reply-index');
     const postId = new URLSearchParams(window.location.search).get('id');
@@ -185,6 +186,7 @@ async function handleReaction(event, type) {
             if (reply.likedIPs && reply.likedIPs.includes(userIP)) {
                 reply.likes -= 1;
                 reply.likedIPs = reply.likedIPs.filter(ip => ip !== userIP);
+                event.target.classList.remove('liked');
             } else {
                 if (reply.dislikedIPs && reply.dislikedIPs.includes(userIP)) {
                     alert('您已经点踩过该回复，不能点赞');
@@ -193,11 +195,15 @@ async function handleReaction(event, type) {
                 reply.likes = (reply.likes || 0) + 1;
                 reply.likedIPs = reply.likedIPs || [];
                 reply.likedIPs.push(userIP);
+                event.target.classList.add('liked');
+                event.target.classList.add('like-animation');
+                setTimeout(() => event.target.classList.remove('like-animation'), 500);
             }
         } else {
             if (reply.dislikedIPs && reply.dislikedIPs.includes(userIP)) {
                 reply.dislikes -= 1;
                 reply.dislikedIPs = reply.dislikedIPs.filter(ip => ip !== userIP);
+                event.target.classList.remove('disliked');
             } else {
                 if (reply.likedIPs && reply.likedIPs.includes(userIP)) {
                     alert('您已经点赞过该回复，不能点踩');
@@ -206,15 +212,23 @@ async function handleReaction(event, type) {
                 reply.dislikes = (reply.dislikes || 0) + 1;
                 reply.dislikedIPs = reply.dislikedIPs || [];
                 reply.dislikedIPs.push(userIP);
+                event.target.classList.add('disliked');
+                event.target.classList.add('dislike-animation');
+                setTimeout(() => event.target.classList.remove('dislike-animation'), 500);
             }
         }
 
-        await updateFileContent(fileContent, sha);
-        loadPostDetail(postId);
+        event.target.textContent = `${type === 'like' ? 'Like' : 'Dislike'} (${type === 'like' ? reply.likes : reply.dislikes})`;
+
+        updateFileContent(fileContent, sha).catch(error => {
+            console.error(`Error in handle${type.charAt(0).toUpperCase() + type.slice(1)}:`, error.message);
+        });
     } catch (error) {
         console.error(`Error in handle${type.charAt(0).toUpperCase() + type.slice(1)}:`, error.message);
     }
 }
+
+
 
 async function getUserIP() {
     const response = await fetch('https://api.ipify.org?format=json');
