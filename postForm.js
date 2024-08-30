@@ -4,11 +4,20 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('postFormElement').addEventListener('submit', submitPost);
 });
 
+// postForm.js
+// postForm.js
 function togglePostForm() {
     const postForm = document.getElementById('postForm');
-    postForm.style.display = postForm.style.display === 'none' ? 'block' : 'none';
-}
+    const postsContainer = document.getElementById('posts');
+    const isFormVisible = postForm.style.display === 'block';
 
+    postForm.style.display = isFormVisible ? 'none' : 'block';
+    if (isFormVisible) {
+        postsContainer.classList.remove('posts-container-adjusted');
+    } else {
+        postsContainer.classList.add('posts-container-adjusted');
+    }
+}
 async function submitPost(event) {
     event.preventDefault();
     const title = document.getElementById('postTitle').value;

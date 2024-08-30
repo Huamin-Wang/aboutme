@@ -179,3 +179,7 @@ h2 {
     75% { transform: scale(1.2); }
     100% { transform: scale(1); }
 }
+/* styles.css */
+.posts-container-adjusted {
+    margin-top: 50px; /* 调整帖子因为点击发帖按钮下移 */
+}
