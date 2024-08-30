@@ -1,10 +1,11 @@
+<!-- post.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>帖子详情</title>
-    <link rel="stylesheet" href="styles.css"> <!-- 添加这行来引入外部CSS文件 -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
@@ -22,10 +23,6 @@
     </div>
 
     <script src="api.js"></script>
-    <script src="forum.js"></script>
-    <script>
-        const postId = new URLSearchParams(window.location.search).get('id');  // 从 URL 获取帖子 ID
-        loadPostDetail(postId);  // 加载帖子详情
-    </script>
+    <script src="postDetail.js"></script>
 </body>
 </html>
