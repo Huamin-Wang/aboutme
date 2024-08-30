@@ -14,8 +14,20 @@ body {
 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.header{
-     background-image: url('img/学校大门.png');
+/* styles.css */
+.header {
+    background-image: url('img/学校大门.png');
+    background-size: cover;
+    background-position: center;
+    height: 300px; /* Default height for larger screens */
+}
+
+/* Media query for smaller screens */
+@media (max-width: 600px) {
+    .header {
+        height: 200px; /* Smaller height for mobile devices */
+        background-size: contain; /* Adjust background size to fit smaller screens */
+    }
 }
 h1 {
     text-align: center;
