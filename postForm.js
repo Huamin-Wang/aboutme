@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('postFormElement').addEventListener('submit', submitPost);
 });
 
+
+
+// postForm.js
 function togglePostForm() {
     const postForm = document.getElementById('postForm');
     const postsContainer = document.getElementById('posts');
@@ -13,13 +16,15 @@ function togglePostForm() {
     if (isFormVisible) {
         postsContainer.classList.remove('posts-container-adjusted');
         postsContainer.style.top = '0'; // Reset top position when form is hidden
+        document.querySelector('.header h2').style.display = 'none'; // Hide h2 when form is hidden
     } else {
         postsContainer.classList.add('posts-container-adjusted');
         const header = document.querySelector('.header');
         postsContainer.style.top = `${header.offsetHeight}px`;
 
-        // Add animation to the h2 element
+        // Show and add animation to the h2 element
         const h2Element = document.querySelector('.header h2');
+        h2Element.style.display = 'block';
         h2Element.classList.add('highlight-animation');
     }
 
@@ -28,6 +33,7 @@ function togglePostForm() {
     pagination.style.position = 'relative';
     pagination.style.top = postForm.style.display === 'block' ? '20px' : '0';
 }
+
 
 async function submitPost(event) {
     event.preventDefault();
