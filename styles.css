@@ -201,4 +201,15 @@ h2 {
     margin-bottom: 20px;
     border-bottom: 2px solid #ddd;
     padding-bottom: 10px;
+}/* Add animation for the h2 element */
+/* styles.css */
+/* Add animation for the h2 element */
+@keyframes highlightText {
+    0% { color: #555; }
+    50% { color: #ff6347; }
+    100% { color: #555; }
+}
+
+.highlight-animation {
+    animation: highlightText 1s ease-in-out;
 }
