@@ -1,11 +1,20 @@
 // forum.js
 // forum.js
 
+// forum.js
 document.getElementById('uploadForm').addEventListener('submit', async function(event) {
     event.preventDefault();
-    const formData = new FormData();
     const imageInput = document.getElementById('imageInput');
-    formData.append('image', imageInput.files[0]);
+    const file = imageInput.files[0];
+    const maxSize = 2 * 1024 * 1024; // 2MB
+
+    if (file.size > maxSize) {
+        alert('Error: File size exceeds 2MB');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
 
     const response = await fetch('/upload_image', {
         method: 'POST',
@@ -15,16 +24,13 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
     if (response.ok) {
         const result = await response.json();
         alert(result.message);
-        const imageUrl = `/download_image/${imageInput.files[0].name}`;
+        const imageUrl = `/download_image/${file.name}`;
         document.getElementById('uploadedImage').innerHTML = `<img src="${imageUrl}" alt="Uploaded Image">`;
     } else {
         const error = await response.json();
         alert(`Error: ${error.message}`);
     }
 });
-
-
-
 
 
 async function loadPosts(page = 1, pageSize = 10) {

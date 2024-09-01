@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f7f7f7;
+    background-color: #1b1c1b;
     margin: 0;
     padding: 0;
     color: #333;
@@ -33,7 +33,15 @@ h1 {
     text-align: center;
     color: #333;
 }
-
+/* styles.css */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 #postButton {
     display: block;
     width: 200px;
