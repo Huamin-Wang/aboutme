@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPostDetail(postId);
 });
 
+
 async function loadPostDetail(postId) {
     try {
         const { content } = await getFileContent();
@@ -13,6 +14,14 @@ async function loadPostDetail(postId) {
         document.getElementById('postTitle').textContent = post.title;
         document.getElementById('postContent').textContent = post.content;
         document.getElementById('postTimestamp').textContent = new Date(post.timestamp).toLocaleString();
+
+        if (post.image) {
+            document.getElementById('postImage').src = post.image;
+            document.getElementById('postImage').style.display = 'block';
+        } else {
+            document.getElementById('postImage').style.display = 'none';
+        }
+
         displayReplies(post.replies);
 
         document.getElementById('replyForm').addEventListener('submit', (event) => {
@@ -23,6 +32,8 @@ async function loadPostDetail(postId) {
         console.error('Error:', error.message);
     }
 }
+
+
 
 function displayReplies(replies) {
     const repliesContainer = document.getElementById('replies');
