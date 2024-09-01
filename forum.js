@@ -1,6 +1,27 @@
 // forum.js
+// forum.js
 
+document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const formData = new FormData();
+    const imageInput = document.getElementById('imageInput');
+    formData.append('image', imageInput.files[0]);
 
+    const response = await fetch('/upload_image', {
+        method: 'POST',
+        body: formData
+    });
+
+    if (response.ok) {
+        const result = await response.json();
+        alert(result.message);
+        const imageUrl = `/download_image/${imageInput.files[0].name}`;
+        document.getElementById('uploadedImage').innerHTML = `<img src="${imageUrl}" alt="Uploaded Image">`;
+    } else {
+        const error = await response.json();
+        alert(`Error: ${error.message}`);
+    }
+});
 
 
 

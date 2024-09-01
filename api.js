@@ -19,6 +19,10 @@ async function fetchFromGitee(url, options = {}) {
     return response.json();
 }
 
+
+
+
+// api.js
 async function getFileContent() {
     try {
         const response = await fetch(apiUrl, { headers });

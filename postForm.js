@@ -35,12 +35,27 @@ function togglePostForm() {
 }
 
 
+// postForm.js
 async function submitPost(event) {
     event.preventDefault();
     const title = document.getElementById('postTitle').value;
     const content = document.getElementById('postContent').value;
+    const imageFile = document.getElementById('postImage').files[0];
     const newPost = { id: generateUniqueId(), title, content, timestamp: new Date().toISOString(), replies: [] };
 
+    if (imageFile) {
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            newPost.image = e.target.result;
+            await savePost(newPost);
+        };
+        reader.readAsDataURL(imageFile);
+    } else {
+        await savePost(newPost);
+    }
+}
+
+async function savePost(newPost) {
     try {
         let { sha, content: fileContent } = await getFileContent();
         fileContent.push(newPost);
@@ -52,7 +67,6 @@ async function submitPost(event) {
         console.error('Error:', error.message);
     }
 }
-
 function generateUniqueId() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }

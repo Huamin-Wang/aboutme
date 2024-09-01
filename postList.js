@@ -41,11 +41,13 @@ async function loadPosts(page = 1, pageSize = 10) {
         loadingMessage.style.display = 'none';
     }
 }
+
+
+
+// postList.js
 function displayPosts(posts) {
     const postsContainer = document.getElementById('posts');
     const fragment = document.createDocumentFragment();
-
-    console.log("Displaying posts:", posts);  // Debugging log
 
     posts.forEach(post => {
         const postElement = document.createElement('div');
@@ -53,12 +55,39 @@ function displayPosts(posts) {
         postElement.innerHTML = `
             <a href="post.html?id=${post.id}" class="post-title">${post.title}</a>
             <div class="timestamp">${new Date(post.timestamp).toLocaleString()}</div>
+            ${post.image ? `<img src="${post.image}" alt="Post Image" class="post-image">` : ''}
         `;
         fragment.appendChild(postElement);
     });
 
     postsContainer.appendChild(fragment);
 }
+
+// postDetail.js
+function displayReplies(replies) {
+    const repliesContainer = document.getElementById('replies');
+    repliesContainer.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+
+    replies.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    replies.forEach((reply, index) => {
+        const replyElement = document.createElement('div');
+        replyElement.classList.add('reply');
+        replyElement.innerHTML = `
+            ${index + 1}楼: ${reply.content}
+            <span class="reply-timestamp">${new Date(reply.timestamp).toLocaleString()}</span>
+            <button class="like-button" data-reply-index="${index}">Like (${reply.likes || 0})</button>
+            <button class="dislike-button" data-reply-index="${index}">Dislike (${reply.dislikes || 0})</button>
+        `;
+        fragment.appendChild(replyElement);
+    });
+
+    repliesContainer.appendChild(fragment);
+    document.querySelectorAll('.like-button').forEach(button => button.addEventListener('click', handleLike));
+    document.querySelectorAll('.dislike-button').forEach(button => button.addEventListener('click', handleDislike));
+}
+
+
 function setupPagination(totalPages, currentPage) {
     const paginationContainer = document.getElementById('pagination');
     paginationContainer.innerHTML = '';
