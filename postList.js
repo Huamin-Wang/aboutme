@@ -49,6 +49,7 @@ async function loadPosts(page = 1) {
     }
 }
 
+// postList.js
 function displayPosts(posts) {
     const postsContainer = document.getElementById('posts');
     const fragment = document.createDocumentFragment();
@@ -66,6 +67,8 @@ function displayPosts(posts) {
 
     postsContainer.appendChild(fragment);
 }
+
+
 
 function setupPagination(totalPages, currentPage) {
     const paginationContainer = document.getElementById('pagination');

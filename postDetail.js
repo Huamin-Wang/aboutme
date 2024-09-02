@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPostDetail(postId);
 });
 
-
+// postDetail.js
 async function loadPostDetail(postId) {
     try {
         const { content } = await getFileContent();
@@ -32,9 +32,6 @@ async function loadPostDetail(postId) {
         console.error('Error:', error.message);
     }
 }
-
-
-
 function displayReplies(replies) {
     const repliesContainer = document.getElementById('replies');
     repliesContainer.innerHTML = '';
@@ -62,6 +59,10 @@ async function submitReply(postId) {
     const replyContent = document.getElementById('replyInput').value;
     const newReply = { content: replyContent, timestamp: new Date().toISOString() };
 
+    // Show loading indicator
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    loadingIndicator.style.display = 'block';
+
     try {
         let { sha, content: fileContent } = await getFileContent();
         const post = fileContent.find(p => p.id === postId);
@@ -71,6 +72,9 @@ async function submitReply(postId) {
         document.getElementById('replyForm').reset();
     } catch (error) {
         console.error('Error:', error.message);
+    } finally {
+        // Hide loading indicator
+        loadingIndicator.style.display = 'none';
     }
 }
 
@@ -82,12 +86,6 @@ async function handleDislike(event) {
     await handleReaction(event, 'dislike');
 }
 
-
-// postDetail.js
-// postDetail.js
-// postDetail.js
-// postDetail.js
-// postDetail.js
 async function handleReaction(event, type) {
     const replyIndex = event.target.getAttribute('data-reply-index');
     const postId = new URLSearchParams(window.location.search).get('id');
@@ -147,8 +145,6 @@ async function handleReaction(event, type) {
     }
 }
 
-
-
 document.querySelectorAll('.like-button').forEach(button => {
     button.addEventListener('click', handleLike);
     button.addEventListener('dblclick', handleLike);
@@ -158,6 +154,7 @@ document.querySelectorAll('.dislike-button').forEach(button => {
     button.addEventListener('click', handleDislike);
     button.addEventListener('dblclick', handleDislike);
 });
+
 async function getUserIP() {
     const response = await fetch('https://api.ipify.org?format=json');
     const data = await response.json();
