@@ -1,5 +1,6 @@
 // postForm.js
- let uniqueFilename;
+let uniqueFilename;
+
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('postButton').addEventListener('click', togglePostForm);
     document.getElementById('postFormElement').addEventListener('submit', submitPost);
@@ -44,6 +45,7 @@ async function submitPost(event) {
 
     await savePost(newPost);
 }
+
 async function savePost(newPost) {
     try {
         let { sha, content: fileContent } = await getFileContent();
@@ -65,7 +67,6 @@ function generateUniqueId() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
 
-
 // 上传图片的逻辑
 document.getElementById('postFormElement').addEventListener('submit', async function(event) {
     event.preventDefault(); // 阻止默认表单提交
@@ -76,7 +77,7 @@ document.getElementById('postFormElement').addEventListener('submit', async func
     const fileExtension = file.name.split('.').pop();
 
     // 生成唯一文件名，可以使用时间戳 + 随机数
-     uniqueFilename = `image_${Date.now()}_${Math.floor(Math.random() * 10000)}.${fileExtension}`;
+    uniqueFilename = `image_${Date.now()}_${Math.floor(Math.random() * 10000)}.${fileExtension}`;
 
     // 读取图片并进行Base64编码
     const reader = new FileReader();

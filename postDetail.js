@@ -15,8 +15,10 @@ async function loadPostDetail(postId) {
         document.getElementById('postContent').textContent = post.content;
         document.getElementById('postTimestamp').textContent = new Date(post.timestamp).toLocaleString();
 
-        if (post.image) {
-            document.getElementById('postImage').src = post.image;
+        if (post.uniqueFilename) {
+            const imagePath = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${image_folder}/${post.uniqueFilename}`;
+            const imageUrl = await fetchImage(imagePath, token);
+            document.getElementById('postImage').src = imageUrl;
             document.getElementById('postImage').style.display = 'block';
         } else {
             document.getElementById('postImage').style.display = 'none';
@@ -32,6 +34,25 @@ async function loadPostDetail(postId) {
         console.error('Error:', error.message);
     }
 }
+
+async function fetchImage(imagePath, token) {
+    const response = await fetch(imagePath, {
+        headers: {
+            "Authorization": `token ${token}`,
+            "Accept": "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+    }
+
+    const fileData = await response.json();
+    const fileContentBase64 = fileData.content;
+    return URL.createObjectURL(new Blob([new Uint8Array(atob(fileContentBase64).split("").map(char => char.charCodeAt(0)))]));
+}
+
+
 function displayReplies(replies) {
     const repliesContainer = document.getElementById('replies');
     repliesContainer.innerHTML = '';

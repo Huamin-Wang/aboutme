@@ -1,17 +1,6 @@
 // postList.js
 
 
-
-
-
-
-
-// postList.js
-let currentPage = 1;
-let isLoading = false;
-// postList.js
-const pageSize = 4; // Set page size to 4
-
 async function loadPosts(page = 1) {
     const loadingMessage = document.getElementById('loadingMessage');
     const postsContainer = document.getElementById('posts');
@@ -49,22 +38,6 @@ async function loadPosts(page = 1) {
     }
 }
 
-// postList.js
-async function fetchImage(imagePath, token) {
-    const response = await fetch(imagePath, {
-        headers: {
-            "Authorization": `token ${token}`,
-            "Accept": "application/json"
-        }
-    });
-    if (!response.ok) {
-        throw new Error(`Failed to fetch image: ${response.statusText}`);
-    }
-    const fileData = await response.json();
-    const fileContentBase64 = fileData.content;
-    return URL.createObjectURL(new Blob([new Uint8Array(atob(fileContentBase64).split("").map(char => char.charCodeAt(0)))]));
-}
-
 async function displayPosts(posts) {
     const postsContainer = document.getElementById('posts');
     const fragment = document.createDocumentFragment();
@@ -99,6 +72,63 @@ async function displayPosts(posts) {
     }
 
     postsContainer.appendChild(fragment);
+}
+
+
+
+
+// postList.js
+let currentPage = 1;
+let isLoading = false;
+// postList.js
+const pageSize = 4; // Set page size to 4
+
+
+// postList.js
+async function fetchImage(imagePath, token) {
+    const response = await fetch(imagePath, {
+        headers: {
+            "Authorization": `token ${token}`,
+            "Accept": "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+    }
+
+    const fileData = await response.json();
+    const fileContentBase64 = fileData.content;
+    return URL.createObjectURL(new Blob([new Uint8Array(atob(fileContentBase64).split("").map(char => char.charCodeAt(0)))]));
+}
+async function loadPostDetail(postId) {
+    try {
+        const { content } = await getFileContent();
+        const post = content.find(p => p.id === postId);
+        if (!post) throw new Error("Post not found");
+
+        document.getElementById('postTitle').textContent = post.title;
+        document.getElementById('postContent').textContent = post.content;
+        document.getElementById('postTimestamp').textContent = new Date(post.timestamp).toLocaleString();
+
+        if (post.uniqueFilename) {
+            const imagePath = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${image_folder}/${post.uniqueFilename}`;
+            const imageUrl = await fetchImage(imagePath, token);
+            document.getElementById('postImage').src = imageUrl;
+            document.getElementById('postImage').style.display = 'block';
+        } else {
+            document.getElementById('postImage').style.display = 'none';
+        }
+
+        displayReplies(post.replies);
+
+        document.getElementById('replyForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+            submitReply(postId);
+        });
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
 }
 
 function setupPagination(totalPages, currentPage) {
