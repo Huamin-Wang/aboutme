@@ -75,3 +75,61 @@ async function savePost(newPost) {
 function generateUniqueId() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
+
+
+// 上传图片的逻辑
+document.getElementById('postFormElement').addEventListener('submit', async function(event) {
+    event.preventDefault(); // 阻止默认表单提交
+
+    const imageInput = document.getElementById('postImage');
+    const file = imageInput.files[0];
+    // 获取文件扩展名
+    const fileExtension = file.name.split('.').pop();
+
+    // 生成唯一文件名，可以使用时间戳 + 随机数
+    const uniqueFilename = `image_${Date.now()}_${Math.floor(Math.random() * 10000)}.${fileExtension}`;
+
+    // 读取图片并进行Base64编码
+    const reader = new FileReader();
+    reader.onloadend = async function() {
+        const base64Image = reader.result.split(',')[1]; // 仅获取Base64部分
+
+        // 存储图片的配置信息
+        const owner = "wang_hua_min";
+        const repo = "we-chat-data";
+        const imageFolder = "images";
+        const token = "4918bb3947dbf1402d7331a65bab1b3e"; // 使用您的Gitee个人访问令牌
+
+        // Gitee API URL
+        const apiUrl = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${imageFolder}/${uniqueFilename}`;
+
+        // 上传请求的payload
+        const payload = {
+            access_token: token,
+            content: base64Image,
+            message: `Upload ${uniqueFilename}`
+        };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (response.status === 201) {
+                document.getElementById('statusMessage').innerText = `图片 '${uniqueFilename}' 上传成功！`;
+            } else {
+                document.getElementById('statusMessage').innerText = `图片上传失败。状态码：${response.status}, 响应：${result.message}`;
+            }
+        } catch (error) {
+            document.getElementById('statusMessage').innerText = `发生错误：${error.message}`;
+        }
+    };
+
+    reader.readAsDataURL(file); // 开始读取文件
+});
