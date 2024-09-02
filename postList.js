@@ -1,7 +1,4 @@
 // postList.js
-document.addEventListener('DOMContentLoaded', () => {
-    loadPosts(1);
-});
 
 
 // postList.js
@@ -42,9 +39,59 @@ async function loadPosts(page = 1, pageSize = 10) {
     }
 }
 
-
-
 // postList.js
+let currentPage = 1;
+const pageSize = 10;
+let isLoading = false;
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadPostsChunk(currentPage);
+    window.addEventListener('scroll', handleScroll);
+});
+
+async function loadPostsChunk(page) {
+    if (isLoading) return;
+    isLoading = true;
+
+    const loadingMessage = document.getElementById('loadingMessage');
+    loadingMessage.style.display = 'block';
+
+    try {
+        const { content } = await getFileContent();
+        console.log("Fetched content:", content);  // Debugging log
+
+        // Sort posts by the latest activity timestamp (post or comment)
+        content.sort((a, b) => {
+            let latestA = new Date(a.timestamp);
+            let latestB = new Date(b.timestamp);
+            if (a.replies.length > 0) {
+                const latestReplyA = new Date(a.replies[a.replies.length - 1].timestamp);
+                if (latestReplyA > latestA) latestA = latestReplyA;
+            }
+            if (b.replies.length > 0) {
+                const latestReplyB = new Date(b.replies[b.replies.length - 1].timestamp);
+                if (latestReplyB > latestB) latestB = latestReplyB;
+            }
+            return latestB - latestA;
+        });
+
+        const totalPages = Math.ceil(content.length / pageSize);
+        const postsChunk = content.slice((page - 1) * pageSize, page * pageSize);
+        displayPosts(postsChunk);
+
+        if (page < totalPages) {
+            currentPage++;
+        } else {
+            window.removeEventListener('scroll', handleScroll);
+        }
+    } catch (error) {
+        console.error('Error:', error.message);
+    } finally {
+        loadingMessage.style.display = 'none';
+        isLoading = false;
+    }
+}
+
 function displayPosts(posts) {
     const postsContainer = document.getElementById('posts');
     const fragment = document.createDocumentFragment();
@@ -62,6 +109,15 @@ function displayPosts(posts) {
 
     postsContainer.appendChild(fragment);
 }
+
+function handleScroll() {
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    if (scrollTop + clientHeight >= scrollHeight - 5) {
+        loadPostsChunk(currentPage);
+    }
+}
+
+// postList.js
 
 // postDetail.js
 function displayReplies(replies) {
