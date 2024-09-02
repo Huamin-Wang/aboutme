@@ -55,9 +55,25 @@ function displayReplies(replies) {
     document.querySelectorAll('.dislike-button').forEach(button => button.addEventListener('click', handleDislike));
 }
 
+// postDetail.js
 async function submitReply(postId) {
     const replyContent = document.getElementById('replyInput').value;
     const newReply = { content: replyContent, timestamp: new Date().toISOString() };
+
+    // Immediately add the new reply to the page
+    const repliesContainer = document.getElementById('replies');
+    const replyElement = document.createElement('div');
+    replyElement.classList.add('reply');
+    replyElement.innerHTML = `
+        ${repliesContainer.children.length + 1}楼: ${newReply.content}
+        <span class="reply-timestamp">${new Date(newReply.timestamp).toLocaleString()}</span>
+        <button class="like-button" data-reply-index="${repliesContainer.children.length}">Like (0)</button>
+        <button class="dislike-button" data-reply-index="${repliesContainer.children.length}">Dislike (0)</button>
+    `;
+    repliesContainer.appendChild(replyElement);
+
+    // Reset the reply form
+    document.getElementById('replyForm').reset();
 
     // Show loading indicator
     const loadingIndicator = document.getElementById('loadingIndicator');
@@ -68,8 +84,6 @@ async function submitReply(postId) {
         const post = fileContent.find(p => p.id === postId);
         post.replies.push(newReply);
         await updateFileContent(fileContent, sha);
-        loadPostDetail(postId);
-        document.getElementById('replyForm').reset();
     } catch (error) {
         console.error('Error:', error.message);
     } finally {
@@ -77,7 +91,6 @@ async function submitReply(postId) {
         loadingIndicator.style.display = 'none';
     }
 }
-
 async function handleLike(event) {
     await handleReaction(event, 'like');
 }
