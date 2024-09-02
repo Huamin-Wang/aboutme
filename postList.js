@@ -1,8 +1,18 @@
 // postList.js
 
 
+
+
+
+
+
 // postList.js
-async function loadPosts(page = 1, pageSize = 10) {
+let currentPage = 1;
+let isLoading = false;
+// postList.js
+const pageSize = 4; // Set page size to 4
+
+async function loadPosts(page = 1) {
     const loadingMessage = document.getElementById('loadingMessage');
     const postsContainer = document.getElementById('posts');
     loadingMessage.style.display = 'block';
@@ -39,14 +49,39 @@ async function loadPosts(page = 1, pageSize = 10) {
     }
 }
 
-// postList.js
-let currentPage = 1;
-const pageSize = 10;
-let isLoading = false;
+function displayPosts(posts) {
+    const postsContainer = document.getElementById('posts');
+    const fragment = document.createDocumentFragment();
+
+    posts.forEach(post => {
+        const postElement = document.createElement('div');
+        postElement.classList.add('post');
+        postElement.innerHTML = `
+            <a href="post.html?id=${post.id}" class="post-title">${post.title}</a>
+            <div class="timestamp">${new Date(post.timestamp).toLocaleString()}</div>
+            ${post.image ? `<a href="post.html?id=${post.id}"><img src="${post.image}" alt="Post Image" class="post-image"></a>` : ''}
+        `;
+        fragment.appendChild(postElement);
+    });
+
+    postsContainer.appendChild(fragment);
+}
+
+function setupPagination(totalPages, currentPage) {
+    const paginationContainer = document.getElementById('pagination');
+    paginationContainer.innerHTML = '';
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageLink = document.createElement('button');
+        pageLink.textContent = i;
+        if (i === currentPage) pageLink.classList.add('active');
+        pageLink.onclick = () => loadPosts(i);
+        paginationContainer.appendChild(pageLink);
+    }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-    loadPostsChunk(currentPage);
-    window.addEventListener('scroll', handleScroll);
+    loadPosts(1);
 });
 
 async function loadPostsChunk(page) {
@@ -92,23 +127,7 @@ async function loadPostsChunk(page) {
     }
 }
 
-function displayPosts(posts) {
-    const postsContainer = document.getElementById('posts');
-    const fragment = document.createDocumentFragment();
 
-    posts.forEach(post => {
-        const postElement = document.createElement('div');
-        postElement.classList.add('post');
-        postElement.innerHTML = `
-            <a href="post.html?id=${post.id}" class="post-title">${post.title}</a>
-            <div class="timestamp">${new Date(post.timestamp).toLocaleString()}</div>
-            ${post.image ? `<img src="${post.image}" alt="Post Image" class="post-image">` : ''}
-        `;
-        fragment.appendChild(postElement);
-    });
-
-    postsContainer.appendChild(fragment);
-}
 
 function handleScroll() {
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
@@ -143,16 +162,3 @@ function displayReplies(replies) {
     document.querySelectorAll('.dislike-button').forEach(button => button.addEventListener('click', handleDislike));
 }
 
-
-function setupPagination(totalPages, currentPage) {
-    const paginationContainer = document.getElementById('pagination');
-    paginationContainer.innerHTML = '';
-
-    for (let i = 1; i <= totalPages; i++) {
-        const pageLink = document.createElement('button');
-        pageLink.textContent = i;
-        if (i === currentPage) pageLink.classList.add('active');
-        pageLink.onclick = () => loadPosts(i);
-        paginationContainer.appendChild(pageLink);
-    }
-}

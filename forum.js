@@ -1,7 +1,4 @@
 // forum.js
-// forum.js
-
-// forum.js
 document.getElementById('uploadForm').addEventListener('submit', async function(event) {
     event.preventDefault();
     const imageInput = document.getElementById('imageInput');
@@ -32,7 +29,6 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
     }
 });
 
-
 async function loadPosts(page = 1, pageSize = 10) {
     const loadingMessage = document.getElementById('loadingMessage');
     const postsContainer = document.getElementById('posts');
@@ -45,8 +41,8 @@ async function loadPosts(page = 1, pageSize = 10) {
 
         // Sort posts by the latest activity timestamp (post or comment)
         content.sort((a, b) => {
-            const latestA = new Date(a.timestamp);
-            const latestB = new Date(b.timestamp);
+            let latestA = new Date(a.timestamp);
+            let latestB = new Date(b.timestamp);
             if (a.replies.length > 0) {
                 const latestReplyA = new Date(a.replies[a.replies.length - 1].timestamp);
                 if (latestReplyA > latestA) latestA = latestReplyA;
@@ -79,38 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
 function togglePostForm() {
     const postForm = document.getElementById('postForm');
     postForm.style.display = postForm.style.display === 'none' ? 'block' : 'none';
-}
-
-async function loadPosts(page = 1, pageSize = 10) {
-    const loadingMessage = document.getElementById('loadingMessage');
-    const postsContainer = document.getElementById('posts');
-    loadingMessage.style.display = 'block';
-    postsContainer.innerHTML = '';
-
-    try {
-        const { content } = await getFileContent();
-        content.sort((a, b) => {
-            const latestA = new Date(a.timestamp);
-            const latestB = new Date(b.timestamp);
-            if (a.replies.length > 0) {
-                const latestReplyA = new Date(a.replies[a.replies.length - 1].timestamp);
-                if (latestReplyA > latestA) latestA = latestReplyA;
-            }
-            if (b.replies.length > 0) {
-                const latestReplyB = new Date(b.replies[b.replies.length - 1].timestamp);
-                if (latestReplyB > latestB) latestB = latestReplyB;
-            }
-            return latestB - latestA;
-        });
-
-        const totalPages = Math.ceil(content.length / pageSize);
-        displayPosts(content.slice((page - 1) * pageSize, page * pageSize));
-        setupPagination(totalPages, page);
-    } catch (error) {
-        console.error('Error:', error.message);
-    } finally {
-        loadingMessage.style.display = 'none';
-    }
 }
 
 function displayPosts(posts) {
@@ -163,6 +127,7 @@ async function submitPost(event) {
 function generateUniqueId() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
+
 async function loadPostDetail(postId) {
     try {
         const { content } = await getFileContent();
@@ -231,7 +196,6 @@ async function handleDislike(event) {
     await handleReaction(event, 'dislike');
 }
 
-// postDetail.js
 async function handleReaction(event, type) {
     const replyIndex = event.target.getAttribute('data-reply-index');
     const postId = new URLSearchParams(window.location.search).get('id');
@@ -287,8 +251,6 @@ async function handleReaction(event, type) {
         console.error(`Error in handle${type.charAt(0).toUpperCase() + type.slice(1)}:`, error.message);
     }
 }
-
-
 
 async function getUserIP() {
     const response = await fetch('https://api.ipify.org?format=json');
