@@ -62,6 +62,9 @@ async function displayPosts(posts) {
                 imgElement.src = imageUrl;
                 imgElement.alt = 'Post Image';
                 imgElement.classList.add('post-image');
+                imgElement.addEventListener('click', () => {
+                    window.location.href = `post.html?id=${post.id}`;
+                });
                 postElement.appendChild(imgElement);
             } catch (error) {
                 console.error('Error fetching image:', error.message);
@@ -73,7 +76,6 @@ async function displayPosts(posts) {
 
     postsContainer.appendChild(fragment);
 }
-
 
 
 
@@ -101,6 +103,8 @@ async function fetchImage(imagePath, token) {
     const fileContentBase64 = fileData.content;
     return URL.createObjectURL(new Blob([new Uint8Array(atob(fileContentBase64).split("").map(char => char.charCodeAt(0)))]));
 }
+
+
 async function loadPostDetail(postId) {
     try {
         const { content } = await getFileContent();
