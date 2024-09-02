@@ -1,5 +1,5 @@
 // postForm.js
-
+ let uniqueFilename;
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('postButton').addEventListener('click', togglePostForm);
     document.getElementById('postFormElement').addEventListener('submit', submitPost);
@@ -36,25 +36,14 @@ async function submitPost(event) {
     event.preventDefault();
     const title = document.getElementById('postTitle').value;
     const content = document.getElementById('postContent').value;
-    const imageFile = document.getElementById('postImage').files[0];
-    const newPost = { id: generateUniqueId(), title, content, timestamp: new Date().toISOString(), replies: [] };
+    const newPost = { id: generateUniqueId(), title, content, timestamp: new Date().toISOString(), uniqueFilename, replies: [] };
 
     // Show loading indicator
     const loadingIndicator = document.getElementById('loadingIndicator');
     loadingIndicator.style.display = 'block';
 
-    if (imageFile) {
-        const reader = new FileReader();
-        reader.onload = async function(e) {
-            newPost.image = e.target.result;
-            await savePost(newPost);
-        };
-        reader.readAsDataURL(imageFile);
-    } else {
-        await savePost(newPost);
-    }
+    await savePost(newPost);
 }
-
 async function savePost(newPost) {
     try {
         let { sha, content: fileContent } = await getFileContent();
@@ -87,7 +76,7 @@ document.getElementById('postFormElement').addEventListener('submit', async func
     const fileExtension = file.name.split('.').pop();
 
     // 生成唯一文件名，可以使用时间戳 + 随机数
-    const uniqueFilename = `image_${Date.now()}_${Math.floor(Math.random() * 10000)}.${fileExtension}`;
+     uniqueFilename = `image_${Date.now()}_${Math.floor(Math.random() * 10000)}.${fileExtension}`;
 
     // 读取图片并进行Base64编码
     const reader = new FileReader();

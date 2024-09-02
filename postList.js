@@ -50,25 +50,56 @@ async function loadPosts(page = 1) {
 }
 
 // postList.js
-function displayPosts(posts) {
+async function fetchImage(imagePath, token) {
+    const response = await fetch(imagePath, {
+        headers: {
+            "Authorization": `token ${token}`,
+            "Accept": "application/json"
+        }
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.statusText}`);
+    }
+    const fileData = await response.json();
+    const fileContentBase64 = fileData.content;
+    return URL.createObjectURL(new Blob([new Uint8Array(atob(fileContentBase64).split("").map(char => char.charCodeAt(0)))]));
+}
+
+async function displayPosts(posts) {
     const postsContainer = document.getElementById('posts');
     const fragment = document.createDocumentFragment();
+    const token = "4918bb3947dbf1402d7331a65bab1b3e";
+    const owner = "wang_hua_min";
+    const repo = "we-chat-data";
+    const image_folder = "images";
 
-    posts.forEach(post => {
+    for (const post of posts) {
         const postElement = document.createElement('div');
         postElement.classList.add('post');
         postElement.innerHTML = `
             <a href="post.html?id=${post.id}" class="post-title">${post.title}</a>
             <div class="timestamp">${new Date(post.timestamp).toLocaleString()}</div>
-            ${post.image ? `<a href="post.html?id=${post.id}"><img src="${post.image}" alt="Post Image" class="post-image"></a>` : ''}
         `;
+
+        if (post.uniqueFilename) {
+            try {
+                const imagePath = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${image_folder}/${post.uniqueFilename}`;
+                const imageUrl = await fetchImage(imagePath, token);
+                const imgElement = document.createElement('img');
+                imgElement.src = imageUrl;
+                imgElement.alt = 'Post Image';
+                imgElement.classList.add('post-image');
+                postElement.appendChild(imgElement);
+            } catch (error) {
+                console.error('Error fetching image:', error.message);
+            }
+        }
+
         fragment.appendChild(postElement);
-    });
+    }
 
     postsContainer.appendChild(fragment);
 }
-
-
 
 function setupPagination(totalPages, currentPage) {
     const paginationContainer = document.getElementById('pagination');
