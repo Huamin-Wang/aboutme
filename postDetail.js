@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPostDetail(postId);
 });
 
+
+
 // postDetail.js
 async function loadPostDetail(postId) {
     try {
@@ -20,6 +22,7 @@ async function loadPostDetail(postId) {
             const imageUrl = await fetchImage(imagePath, token);
             document.getElementById('postImage').src = imageUrl;
             document.getElementById('postImage').style.display = 'block';
+
         } else {
             document.getElementById('postImage').style.display = 'none';
         }

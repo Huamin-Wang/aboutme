@@ -1,6 +1,7 @@
 // postList.js
 
 
+
 async function loadPosts(page = 1) {
     const loadingMessage = document.getElementById('loadingMessage');
     const postsContainer = document.getElementById('posts');
@@ -29,22 +30,22 @@ async function loadPosts(page = 1) {
         console.log("Sorted content:", content);  // Debugging log
 
         const totalPages = Math.ceil(content.length / pageSize);
-        displayPosts(content.slice((page - 1) * pageSize, page * pageSize));
+        displayPosts(content.slice((page - 1) * pageSize, page * pageSize), loadingMessage);
         setupPagination(totalPages, page);
     } catch (error) {
         console.error('Error:', error.message);
-    } finally {
         loadingMessage.style.display = 'none';
     }
 }
 
-async function displayPosts(posts) {
+async function displayPosts(posts, loadingMessage) {
     const postsContainer = document.getElementById('posts');
     const fragment = document.createDocumentFragment();
     const token = "4918bb3947dbf1402d7331a65bab1b3e";
     const owner = "wang_hua_min";
     const repo = "we-chat-data";
     const image_folder = "images";
+    let imagesToLoad = 0;
 
     for (const post of posts) {
         const postElement = document.createElement('div');
@@ -55,6 +56,7 @@ async function displayPosts(posts) {
         `;
 
         if (post.uniqueFilename) {
+            imagesToLoad++;
             try {
                 const imagePath = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${image_folder}/${post.uniqueFilename}`;
                 const imageUrl = await fetchImage(imagePath, token);
@@ -63,11 +65,18 @@ async function displayPosts(posts) {
                 imgElement.alt = 'Post Image';
                 imgElement.classList.add('post-image');
                 imgElement.addEventListener('click', () => {
-                    window.location.href = `post.html?id=${post.id}`;
+                window.location.href = `post.html?id=${post.id}`;
+            });
+                imgElement.addEventListener('load', () => {
+                    imagesToLoad--;
+                    if (imagesToLoad === 0) {
+                        loadingMessage.style.display = 'none';
+                    }
                 });
                 postElement.appendChild(imgElement);
             } catch (error) {
                 console.error('Error fetching image:', error.message);
+                imagesToLoad--;
             }
         }
 
@@ -75,8 +84,10 @@ async function displayPosts(posts) {
     }
 
     postsContainer.appendChild(fragment);
+    if (imagesToLoad === 0) {
+        loadingMessage.style.display = 'none';
+    }
 }
-
 
 
 // postList.js
