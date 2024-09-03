@@ -6,6 +6,7 @@ body {
     color: #333;
 }
 
+
 .container {
     max-width: 800px;
     margin: 30px auto;
@@ -190,7 +191,7 @@ h2 {
 /* styles.css */
 .posts-container-adjusted {
     position: relative;
-    top: 0; /* Reset top position when form is hidden */
+    top: 0px; /* Reset top position when form is hidden */
 }
 /* styles.css */
 .header h1 {
