@@ -17,7 +17,7 @@ body {
 }
 /* styles.css */
 .header {
-    background-image: url('img/学校大门.png');
+    background-image: url('img/学校大门(小体积).png');
     background-size: cover;
     background-position: center;
     height: 300px; /* Default height for larger screens */
