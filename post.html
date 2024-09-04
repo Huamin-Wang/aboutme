@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a href="https://huamin-wang.github.io/aboutme/forum.html" class="back-to-home">
+        <img src="img/home-icon.png" alt="Back to Home" class="home-icon">
+    </a>
+
     <div class="container">
         <h1 id="postTitle"></h1>
         <div id="postContent"></div>
@@ -25,5 +29,16 @@
 
     <script src="api.js"></script>
     <script src="postDetail.js"></script>
+    <script>
+        document.querySelector('.back-to-home').addEventListener('click', function(event) {
+            event.preventDefault();
+            const link = this;
+            document.body.style.transition = 'opacity 0.5s';
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = link.href;
+            }, 500);
+        });
+    </script>
 </body>
 </html>
