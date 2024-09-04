@@ -9,14 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
 // postDetail.js
 async function loadPostDetail(postId) {
     try {
-        const { content } = await getFileContent();
+        const {content} = await getFileContent();
         const post = content.find(p => p.id === postId);
         if (!post) throw new Error("Post not found");
 
         document.getElementById('postTitle').textContent = post.title;
         document.getElementById('postContent').textContent = post.content;
         document.getElementById('postTimestamp').textContent = new Date(post.timestamp).toLocaleString();
-
+       document.title = post.title;
         if (post.uniqueFilename) {
 
             const imagePath = `https://gitee.com/api/v5/repos/${owner}/${imgs_repo}/contents/${image_folder}/${post.uniqueFilename}`;
