@@ -84,8 +84,8 @@ async function displayPosts(posts, loadingMessage) {
             imgElement.classList.add('post-image');
             imgElement.postData = post; // 将 post 数据存储在 img 元素上，以便在懒加载时使用
 // 设置图片大小（例如：200px 宽度和 150px 高度）
-    imgElement.style.width = '200px'; // 设置图片宽度
-    imgElement.style.height = 'auto'; // 设置图片高度
+    imgElement.style.width = 'auto'; // 设置图片宽度
+    imgElement.style.height = '200px'; // 设置图片高度
             // 初始 src 设置为占位符图片或留空
             imgElement.src = 'img/placeholder.gif'; // 可以换成你的占位符图片
             imgElement.addEventListener('click', () => {
