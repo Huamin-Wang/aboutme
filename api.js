@@ -1,9 +1,13 @@
 // api.js
 const owner = "wang_hua_min";
 const repo = "we-chat-data";
+const imgs_repo="bbs_images";
 const path = "data/forumData.json";
 const token = "4918bb3947dbf1402d7331a65bab1b3e";
 const  image_folder= "images";
+const imageFolder = "images";
+
+
 const apiUrl = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${path}`;
 const headers = {
     "Authorization": `token ${token}`,

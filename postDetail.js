@@ -18,7 +18,8 @@ async function loadPostDetail(postId) {
         document.getElementById('postTimestamp').textContent = new Date(post.timestamp).toLocaleString();
 
         if (post.uniqueFilename) {
-            const imagePath = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${image_folder}/${post.uniqueFilename}`;
+
+            const imagePath = `https://gitee.com/api/v5/repos/${owner}/${imgs_repo}/contents/${image_folder}/${post.uniqueFilename}`;
             const imageUrl = await fetchImage(imagePath, token);
             document.getElementById('postImage').src = imageUrl;
             document.getElementById('postImage').style.display = 'block';

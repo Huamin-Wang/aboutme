@@ -44,7 +44,7 @@ async function displayPosts(posts, loadingMessage) {
     const token = "4918bb3947dbf1402d7331a65bab1b3e";
     const owner = "wang_hua_min";
     const repo = "we-chat-data";
-    const image_folder = "images";
+    //const image_folder = "images";
     let imagesToLoad = 0;
 
     for (const post of posts) {
@@ -58,7 +58,7 @@ async function displayPosts(posts, loadingMessage) {
         if (post.uniqueFilename) {
             imagesToLoad++;
             try {
-                const imagePath = `https://gitee.com/api/v5/repos/${owner}/${repo}/contents/${image_folder}/${post.uniqueFilename}`;
+                const imagePath = `https://gitee.com/api/v5/repos/${owner}/${imgs_repo}/contents/${image_folder}/${post.uniqueFilename}`;
                 const imageUrl = await fetchImage(imagePath, token);
                 const imgElement = document.createElement('img');
                 imgElement.src = imageUrl;
