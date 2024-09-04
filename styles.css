@@ -71,13 +71,43 @@ img {
     flex-direction: column;
     width: 100%;
 }
+/* styles.css */
+#replyForm {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
 
-#postForm form input,
+#replyForm input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#replyForm button {
+    padding: 10px;
+    background-color: #5bc0de;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#replyForm button:hover {
+    background-color: #45b1db;
+}
+/* styles.css */
 #postForm form textarea {
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    resize: vertical;
+    height: 200px; /* Increase height */
+    width: 100%; /* Ensure it takes full width */
 }
 
 #postForm form textarea {
