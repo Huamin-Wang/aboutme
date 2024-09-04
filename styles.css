@@ -20,7 +20,7 @@ body {
     background-image: url('img/学校大门(小体积).png');
     background-size: cover;
     background-position: center;
-    height: 300px; /* Default height for larger screens */
+    height: auto; /* Default height for larger screens */
 }
 
 /* Media query for smaller screens */
