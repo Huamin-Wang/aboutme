@@ -41,11 +41,32 @@ async function loadPosts(page = 1) {
 async function displayPosts(posts, loadingMessage) {
     const postsContainer = document.getElementById('posts');
     const fragment = document.createDocumentFragment();
-    const token = "4918bb3947dbf1402d7331a65bab1b3e";
-    const owner = "wang_hua_min";
-    const repo = "we-chat-data";
-    //const image_folder = "images";
     let imagesToLoad = 0;
+
+    // 创建 IntersectionObserver 实例，用于懒加载图片
+    const lazyImageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(async (entry) => {
+            if (entry.isIntersecting) {
+                const imgElement = entry.target;
+                const post = imgElement.postData; // 通过自定义属性获取相关的 post 数据
+                try {
+                    // 获取图片 URL 并设置为 img 元素的 src
+                    const imagePath = `https://gitee.com/api/v5/repos/${owner}/${imgs_repo}/contents/${image_folder}/${post.uniqueFilename}`;
+                    const imageUrl = await fetchImage(imagePath, token);
+                    imgElement.src = imageUrl;
+                } catch (error) {
+                    console.error('Error fetching image:', error.message);
+                } finally {
+                    imagesToLoad--;
+                    if (imagesToLoad === 0) {
+                        loadingMessage.style.display = 'none';
+                    }
+                    // 图片加载完成后，停止观察此元素
+                    observer.unobserve(imgElement);
+                }
+            }
+        });
+    });
 
     for (const post of posts) {
         const postElement = document.createElement('div');
@@ -57,36 +78,45 @@ async function displayPosts(posts, loadingMessage) {
 
         if (post.uniqueFilename) {
             imagesToLoad++;
-            try {
-                const imagePath = `https://gitee.com/api/v5/repos/${owner}/${imgs_repo}/contents/${image_folder}/${post.uniqueFilename}`;
-                const imageUrl = await fetchImage(imagePath, token);
-                const imgElement = document.createElement('img');
-                imgElement.src = imageUrl;
-                imgElement.alt = 'Post Image';
-                imgElement.classList.add('post-image');
-                imgElement.addEventListener('click', () => {
+
+            // 创建 img 元素并添加懒加载功能
+            const imgElement = document.createElement('img');
+            imgElement.alt = 'Post Image';
+            imgElement.classList.add('post-image');
+            imgElement.postData = post; // 将 post 数据存储在 img 元素上，以便在懒加载时使用
+
+            // 初始 src 设置为占位符图片或留空
+            imgElement.src = 'placeholder.jpg'; // 可以换成你的占位符图片
+            imgElement.addEventListener('click', () => {
                 window.location.href = `post.html?id=${post.id}`;
             });
-                imgElement.addEventListener('load', () => {
-                    imagesToLoad--;
-                    if (imagesToLoad === 0) {
-                        loadingMessage.style.display = 'none';
-                    }
-                });
-                postElement.appendChild(imgElement);
-            } catch (error) {
-                console.error('Error fetching image:', error.message);
-                imagesToLoad--;
-            }
+
+            // 使用 IntersectionObserver 观察图片是否进入视口
+            lazyImageObserver.observe(imgElement);
+
+            postElement.appendChild(imgElement);
         }
 
         fragment.appendChild(postElement);
     }
 
     postsContainer.appendChild(fragment);
+
     if (imagesToLoad === 0) {
         loadingMessage.style.display = 'none';
     }
+}
+
+// 异步函数，用于从 Gitee 获取图片的 Base64 数据并转换为图片 URL
+async function fetchImage(imagePath, token) {
+    const response = await fetch(imagePath, {
+        headers: {
+            'Authorization': `token ${token}`
+        }
+    });
+    const data = await response.json();
+    // 假设图片是以 Base64 编码存储在 content 字段中，需要解码并构建 data URL
+    return `data:${data.content_type};base64,${data.content}`;
 }
 
 
