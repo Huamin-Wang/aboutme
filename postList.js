@@ -86,7 +86,7 @@ async function displayPosts(posts, loadingMessage) {
             imgElement.postData = post; // 将 post 数据存储在 img 元素上，以便在懒加载时使用
 
             // 初始 src 设置为占位符图片或留空
-            imgElement.src = 'placeholder.jpg'; // 可以换成你的占位符图片
+            imgElement.src = 'img/placeholder.gif'; // 可以换成你的占位符图片
             imgElement.addEventListener('click', () => {
                 window.location.href = `post.html?id=${post.id}`;
             });
