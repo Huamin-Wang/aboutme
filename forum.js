@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function togglePostForm() {
     const postForm = document.getElementById('postForm');
     postForm.style.display = postForm.style.display === 'none' ? 'block' : 'none';
+
 }
 
 function displayPosts(posts) {
