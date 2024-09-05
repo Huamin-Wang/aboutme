@@ -66,12 +66,14 @@ function displayReplies(replies) {
     replies.forEach((reply, index) => {
         const replyElement = document.createElement('div');
         replyElement.classList.add('reply');
-        replyElement.innerHTML = `
+
+          replyElement.innerHTML = `
             ${index + 1}楼: ${reply.content}
             <span class="reply-timestamp">${new Date(reply.timestamp).toLocaleString()}</span>
-            <button class="like-button" data-reply-index="${index}">Like (${reply.likes || 0})</button>
-            <button class="dislike-button" data-reply-index="${index}">Dislike (${reply.dislikes || 0})</button>
+            <button class="like-button" data-reply-index="${index}">同意 (${reply.likes || 0})</button>
+            <button class="dislike-button" data-reply-index="${index}">不同意 (${reply.dislikes || 0})</button>
         `;
+
         fragment.appendChild(replyElement);
     });
 
@@ -172,7 +174,7 @@ async function handleReaction(event, type) {
             }
         }
 
-        event.target.textContent = `${type === 'like' ? 'Like' : 'Dislike'} (${type === 'like' ? reply.likes : reply.dislikes})`;
+        event.target.textContent = `${type === 'like' ? '👍' : '👎'} (${type === 'like' ? reply.likes : reply.dislikes})`;
 
         await updateFileContent(fileContent, sha);
 
