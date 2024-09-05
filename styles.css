@@ -26,7 +26,7 @@ body {
 /* Media query for smaller screens */
 @media (max-width: 600px) {
     .header {
-        height: 150px; /* 适应手机尺寸 */
+        height: 1600px; /* 适应手机尺寸 */
         background-size: contain; /* Adjust background size to fit smaller screens */
     }
 }
