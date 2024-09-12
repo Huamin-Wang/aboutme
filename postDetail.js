@@ -1,29 +1,24 @@
-// postDetail.js
 document.addEventListener('DOMContentLoaded', () => {
     const postId = new URLSearchParams(window.location.search).get('id');
     loadPostDetail(postId);
 });
 
-
-
-// postDetail.js
 async function loadPostDetail(postId) {
     try {
-        const {content} = await getFileContent();
+        const { content } = await getFileContent();
         const post = content.find(p => p.id === postId);
         if (!post) throw new Error("Post not found");
 
         document.getElementById('postTitle').textContent = post.title;
         document.getElementById('postContent').textContent = post.content;
         document.getElementById('postTimestamp').textContent = new Date(post.timestamp).toLocaleString();
-       document.title = post.title;
-        if (post.uniqueFilename) {
+        document.title = post.title;
 
+        if (post.uniqueFilename) {
             const imagePath = `https://gitee.com/api/v5/repos/${owner}/${imgs_repo}/contents/${image_folder}/${post.uniqueFilename}`;
             const imageUrl = await fetchImage(imagePath, token);
             document.getElementById('postImage').src = imageUrl;
             document.getElementById('postImage').style.display = 'block';
-
         } else {
             document.getElementById('postImage').style.display = 'none';
         }
@@ -56,7 +51,6 @@ async function fetchImage(imagePath, token) {
     return URL.createObjectURL(new Blob([new Uint8Array(atob(fileContentBase64).split("").map(char => char.charCodeAt(0)))]));
 }
 
-
 function displayReplies(replies) {
     const repliesContainer = document.getElementById('replies');
     repliesContainer.innerHTML = '';
@@ -67,7 +61,7 @@ function displayReplies(replies) {
         const replyElement = document.createElement('div');
         replyElement.classList.add('reply');
 
-          replyElement.innerHTML = `
+        replyElement.innerHTML = `
             ${index + 1}楼: ${reply.content}
             <span class="reply-timestamp">${new Date(reply.timestamp).toLocaleString()}</span>
             <button class="like-button" data-reply-index="${index}">同意 (${reply.likes || 0})</button>
@@ -78,11 +72,25 @@ function displayReplies(replies) {
     });
 
     repliesContainer.appendChild(fragment);
-    document.querySelectorAll('.like-button').forEach(button => button.addEventListener('click', handleLike));
-    document.querySelectorAll('.dislike-button').forEach(button => button.addEventListener('click', handleDislike));
+    document.querySelectorAll('.like-button').forEach(button => {
+        button.addEventListener('click', handleLike);
+        button.addEventListener('dblclick', handleLike);
+
+        // 增加移动端触摸事件支持
+        button.addEventListener('touchstart', handleLike);
+        button.addEventListener('touchend', handleLike);
+    });
+
+    document.querySelectorAll('.dislike-button').forEach(button => {
+        button.addEventListener('click', handleDislike);
+        button.addEventListener('dblclick', handleDislike);
+
+        // 增加移动端触摸事件支持
+        button.addEventListener('touchstart', handleDislike);
+        button.addEventListener('touchend', handleDislike);
+    });
 }
 
-// postDetail.js
 async function submitReply(postId) {
     const replyContent = document.getElementById('replyInput').value;
     const newReply = { content: replyContent, timestamp: new Date().toISOString() };
@@ -118,6 +126,7 @@ async function submitReply(postId) {
         loadingIndicator.style.display = 'none';
     }
 }
+
 async function handleLike(event) {
     await handleReaction(event, 'like');
 }
@@ -184,16 +193,6 @@ async function handleReaction(event, type) {
         console.error(`Error in handle${type.charAt(0).toUpperCase() + type.slice(1)}:`, error.message);
     }
 }
-
-document.querySelectorAll('.like-button').forEach(button => {
-    button.addEventListener('click', handleLike);
-    button.addEventListener('dblclick', handleLike);
-});
-
-document.querySelectorAll('.dislike-button').forEach(button => {
-    button.addEventListener('click', handleDislike);
-    button.addEventListener('dblclick', handleDislike);
-});
 
 async function getUserIP() {
     const response = await fetch('https://api.ipify.org?format=json');
