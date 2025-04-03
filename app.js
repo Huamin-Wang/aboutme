@@ -1,7 +1,6 @@
-// 处理发帖提交
+// app.js
 document.getElementById('postForm').addEventListener('submit', (event) => {
     event.preventDefault();
-    console.log("Submit post form triggered");  // 添加调试日志
     submitPost();
 });
 
@@ -12,21 +11,15 @@ async function submitPost() {
     const newPost = { title, content, timestamp, replies: [] };
 
     try {
-        console.log("Fetching file content...");  // 添加调试日志
         let { sha, content: fileContent } = await getFileContent();
-        console.log("File content fetched:", fileContent);  // 输出获取的文件内容
-
         fileContent.push(newPost);
-        console.log("Updating file content with new post...");  // 添加调试日志
         await updateFileContent(fileContent, sha);
-        console.log("File content updated");  // 添加调试日志
-        loadPosts();  // 刷新帖子列表
+        loadPosts();
     } catch (error) {
-        console.error('Error in submitPost:', error.message);  // 输出错误信息
+        console.error('Error in submitPost:', error.message);
     }
 }
 
-// 获取 GitHub 文件内容
 async function getFileContent() {
     try {
         const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
@@ -34,8 +27,8 @@ async function getFileContent() {
         });
 
         if (response.status === 404) {
-            console.log("File not found, returning empty content");  // 添加调试日志
-            return { sha: null, content: [] };  // 文件不存在，返回空内容
+            console.log("File not found, returning empty content");
+            return { sha: null, content: [] };
         } else if (!response.ok) {
             throw new Error('Failed to fetch file content');
         }
@@ -44,12 +37,11 @@ async function getFileContent() {
         const content = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
         return { sha: fileData.sha, content };
     } catch (error) {
-        console.error('Error in getFileContent:', error.message);  // 输出错误信息
-        throw error;  // 重新抛出错误以在上层捕获
+        console.error('Error in getFileContent:', error.message);
+        throw error;
     }
 }
 
-// 更新 GitHub 文件内容
 async function updateFileContent(content, sha) {
     try {
         const updatedData = btoa(unescape(encodeURIComponent(JSON.stringify(content))));
@@ -67,9 +59,9 @@ async function updateFileContent(content, sha) {
             throw new Error('Failed to update file content');
         }
 
-        console.log("File content updated successfully");  // 添加调试日志
+        console.log("File content updated successfully");
     } catch (error) {
-        console.error('Error in updateFileContent:', error.message);  // 输出错误信息
-        throw error;  // 重新抛出错误以在上层捕获
+        console.error('Error in updateFileContent:', error.message);
+        throw error;
     }
 }

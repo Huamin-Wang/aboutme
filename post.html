@@ -11,7 +11,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             line-height: 1.6;
@@ -19,13 +18,11 @@
             color: #333;
             padding-bottom: 80px;
         }
-
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
         }
-
         .back-to-home {
             position: fixed;
             top: 20px;
@@ -37,22 +34,18 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             transition: transform 0.3s;
         }
-
         .back-to-home:hover {
             transform: scale(1.1);
         }
-
         .home-icon {
             width: 24px;
             height: 24px;
         }
-
         #postTitle {
             font-size: 1.8rem;
             margin: 20px 0;
             color: #2c3e50;
         }
-
         #postContent {
             background: white;
             padding: 20px;
@@ -61,28 +54,23 @@
             margin-bottom: 20px;
             font-size: 1.1rem;
         }
-
         #postImage {
             border-radius: 8px;
             margin: 15px 0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
         .timestamp {
             color: #666;
             font-size: 0.9rem;
             margin: 10px 0;
         }
-
         h4 {
             margin: 20px 0 15px;
             color: #2c3e50;
         }
-
         #replies {
             margin-bottom: 20px;
         }
-
         .reply-item {
             background: white;
             padding: 15px;
@@ -90,7 +78,6 @@
             margin-bottom: 10px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-
         #replyForm {
             position: fixed;
             bottom: 0;
@@ -102,7 +89,6 @@
             display: flex;
             gap: 10px;
         }
-
         #replyInput {
             flex: 1;
             padding: 12px;
@@ -112,11 +98,9 @@
             outline: none;
             transition: border-color 0.3s;
         }
-
         #replyInput:focus {
             border-color: #3498db;
         }
-
         #replyForm button {
             background-color: #3498db;
             color: white;
@@ -126,11 +110,9 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-
         #replyForm button:hover {
             background-color: #2980b9;
         }
-
         #loadingIndicator {
             position: fixed;
             top: 50%;
@@ -142,27 +124,26 @@
             border-radius: 8px;
             z-index: 1000;
         }
-
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
             }
-
             #postTitle {
                 font-size: 1.5rem;
                 margin-top: 60px;
             }
-
             .back-to-home {
-                top: 10px;
-                left: 10px;
+                top: 40px;
+                left: 40px;
             }
+
         }
+
     </style>
 </head>
 <body>
     <a href="forum.html" class="back-to-home">
-        <img src="img/home-icon.png" alt="Back to Home" class="home-icon">
+      ←返
     </a>
 
     <div class="container">
@@ -187,7 +168,6 @@
     <script src="api.js"></script>
     <script src="postDetail.js"></script>
     <script>
-        // 保持原有的返回首页动画效果
         document.querySelector('.back-to-home').addEventListener('click', function(event) {
             event.preventDefault();
             const link = this;
@@ -198,7 +178,6 @@
             }, 500);
         });
 
-        // 添加页面载入动画
         document.body.style.opacity = '0';
         window.onload = function() {
             document.body.style.transition = 'opacity 0.3s';

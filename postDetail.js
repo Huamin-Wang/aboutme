@@ -1,4 +1,4 @@
-//postDetail.js
+// postDetail.js
 document.addEventListener('DOMContentLoaded', () => {
     const postId = new URLSearchParams(window.location.search).get('id');
     loadPostDetail(postId);
@@ -26,7 +26,6 @@ async function loadPostDetail(postId) {
 
         displayReplies(post.replies);
 
-        // Remove previous event listener to prevent duplication
         const replyForm = document.getElementById('replyForm');
         const newReplyForm = replyForm.cloneNode(true);
         replyForm.parentNode.replaceChild(newReplyForm, replyForm);
@@ -69,11 +68,9 @@ async function displayReplies(replies) {
             const replyElement = document.createElement('div');
             replyElement.classList.add('reply');
 
-            // Check if current user has liked/disliked
             const hasLiked = reply.likedIPs && reply.likedIPs.includes(userIP);
             const hasDisliked = reply.dislikedIPs && reply.dislikedIPs.includes(userIP);
 
-            // Create consistent emoji buttons
             const likeButtonClass = hasLiked ? 'like-button liked' : 'like-button';
             const dislikeButtonClass = hasDisliked ? 'dislike-button disliked' : 'dislike-button';
 
@@ -89,7 +86,6 @@ async function displayReplies(replies) {
 
         repliesContainer.appendChild(fragment);
 
-        // Add event listeners only once
         document.querySelectorAll('.like-button').forEach(button => {
             button.addEventListener('click', handleLike, { once: true });
         });
@@ -104,7 +100,7 @@ async function displayReplies(replies) {
 
 async function submitReply(postId) {
     const replyContent = document.getElementById('replyInput').value;
-    if (!replyContent.trim()) return; // Prevent empty replies
+    if (!replyContent.trim()) return;
 
     const newReply = {
         content: replyContent,
@@ -115,7 +111,6 @@ async function submitReply(postId) {
         dislikedIPs: []
     };
 
-    // Show loading indicator
     const loadingIndicator = document.getElementById('loadingIndicator');
     if (loadingIndicator) loadingIndicator.style.display = 'block';
 
@@ -130,15 +125,11 @@ async function submitReply(postId) {
         post.replies.push(newReply);
         await updateFileContent(fileContent, sha);
 
-        // Reset the reply form
         document.getElementById('replyForm').reset();
-
-        // Reload the post detail to show the new reply
         await loadPostDetail(postId);
     } catch (error) {
         console.error('Error submitting reply:', error.message);
     } finally {
-        // Hide loading indicator
         if (loadingIndicator) loadingIndicator.style.display = 'none';
     }
 }
@@ -158,8 +149,6 @@ async function handleReaction(event, type) {
 
     try {
         const userIP = await getUserIP();
-        console.log('User IP:', userIP);
-
         let { sha, content: fileContent } = await getFileContent();
         const post = fileContent.find(p => p.id === postId);
 
@@ -169,9 +158,7 @@ async function handleReaction(event, type) {
         }
 
         const reply = post.replies[replyIndex];
-        console.log('Reply before update:', JSON.stringify(reply));
 
-        // Initialize arrays if they don't exist
         if (!reply.likedIPs) reply.likedIPs = [];
         if (!reply.dislikedIPs) reply.dislikedIPs = [];
         if (reply.likes === undefined) reply.likes = 0;
@@ -179,12 +166,9 @@ async function handleReaction(event, type) {
 
         if (type === 'like') {
             if (reply.likedIPs.includes(userIP)) {
-                // Unlike
                 reply.likes = Math.max(0, reply.likes - 1);
                 reply.likedIPs = reply.likedIPs.filter(ip => ip !== userIP);
             } else {
-                // Like
-                // Remove from disliked first if needed
                 if (reply.dislikedIPs.includes(userIP)) {
                     reply.dislikes = Math.max(0, reply.dislikes - 1);
                     reply.dislikedIPs = reply.dislikedIPs.filter(ip => ip !== userIP);
@@ -194,12 +178,9 @@ async function handleReaction(event, type) {
             }
         } else if (type === 'dislike') {
             if (reply.dislikedIPs.includes(userIP)) {
-                // Undislike
                 reply.dislikes = Math.max(0, reply.dislikes - 1);
                 reply.dislikedIPs = reply.dislikedIPs.filter(ip => ip !== userIP);
             } else {
-                // Dislike
-                // Remove from liked first if needed
                 if (reply.likedIPs.includes(userIP)) {
                     reply.likes = Math.max(0, reply.likes - 1);
                     reply.likedIPs = reply.likedIPs.filter(ip => ip !== userIP);
@@ -209,12 +190,7 @@ async function handleReaction(event, type) {
             }
         }
 
-        console.log('Reply after update:', JSON.stringify(reply));
-
-        // Update the file on server
         await updateFileContent(fileContent, sha);
-
-        // Reload post to refresh UI
         await loadPostDetail(postId);
     } catch (error) {
         console.error(`Error in handle${type}:`, error);
@@ -231,7 +207,6 @@ async function getUserIP() {
         return data.ip;
     } catch (error) {
         console.error('Error getting user IP:', error);
-        // Fallback to a pseudorandom identifier if IP can't be fetched
         return 'user_' + Math.random().toString(36).substring(2, 15);
     }
 }
