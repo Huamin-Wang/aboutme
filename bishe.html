@@ -181,8 +181,8 @@
 <body>
 
 <div class="toc-container">
-    <div class="toc-title">目录</div>
-    <ul class="toc-list">
+    <div class="toc-title">目录 <span id="toggle-toc" style="float: right; cursor: pointer;">︽</span></div>
+    <ul class="toc-list" id="toc-list">
         <li><a href="#开题" class="toc-h1">1. 开题</a></li>
         <li><a href="#bishe_shixi" class="toc-h1">2. 毕设以及实习</a></li>
         <li><a href="#bishe" class="toc-h2">2.1 毕设</a></li>
@@ -203,7 +203,33 @@
         <li><a href="#dianzi_ban" class="toc-h2">6.1 电子版材料提交</a></li>
         <li><a href="#zhizhi_ban" class="toc-h2">6.2 纸质版存档材料</a></li>
     </ul>
+    <div style="text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee;">
+        <span id="toggle-toc-bottom" style="cursor: pointer; font-size: 14px; color: #4A90E2;">收起目录 ︽</span>
+    </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.getElementById('toggle-toc');
+    const toggleBtnBottom = document.getElementById('toggle-toc-bottom');
+    const tocList = document.getElementById('toc-list');
+
+    function toggleToc() {
+        if (tocList.style.display === 'none') {
+            tocList.style.display = 'block';
+            toggleBtn.textContent = '︽';
+            toggleBtnBottom.textContent = '收起目录 ︽';
+        } else {
+            tocList.style.display = 'none';
+            toggleBtn.textContent = '︾';
+            toggleBtnBottom.textContent = '展开目录 ︾';
+        }
+    }
+
+    toggleBtn.addEventListener('click', toggleToc);
+    toggleBtnBottom.addEventListener('click', toggleToc);
+});
+</script>
 
 <div class="container">
 
