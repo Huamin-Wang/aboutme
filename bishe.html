@@ -137,11 +137,20 @@
         font-weight: bold;
     }
 
-    /* 图片 */
+    /* 图片 - 大厂风格 */
     img {
-        max-width: 100%;
-        border-radius: 8px;
-        margin: 15px 0;
+        display: block;           /* 块级显示，独占一行 */
+        max-width: 100%;          /* 宽度自适应 */
+        margin: 30px auto;        /* 上下留白，居中 */
+        border-radius: 12px;      /* 圆角 */
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* 弥散阴影 */
+        border: 1px solid #f0f0f0; /* 细边框 */
+        transition: all 0.3s ease; /* 动效 */
+    }
+
+    img:hover {
+        transform: scale(1.02);   /* 悬停轻微放大 */
+        box-shadow: 0 15px 40px rgba(0,0,0,0.12); /* 悬停阴影加深 */
     }
 
     /* 代码块 */
@@ -300,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <h2 id="chugao">3.1 初稿预备</h2>
 <div class="card">
 
-    <p>请在知网查阅与你方向相似的硕士论文。</p>
+    <p>请在知网查阅与你方向相似的硕士论文，也可以参考<a href="paperGuide.html">论文撰写教程</a>。</p>
 
     <pre>
 几点提示：

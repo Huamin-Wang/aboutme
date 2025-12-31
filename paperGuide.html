@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>毕业设计论文撰写与填空指南</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", "Segoe UI", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f9fc;
+        }
+
+        /* 布局容器 */
+        .app-container {
+            display: flex;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            width: 260px;
+            position: sticky;
+            top: 20px;
+            height: calc(100vh - 40px);
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+
+        .sidebar.collapsed {
+            width: 60px;
+        }
+
+        .sidebar-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 50px;
+            box-sizing: border-box;
+        }
+
+        .sidebar-title {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.1em;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #3498db;
+            font-size: 1.2em;
+            padding: 5px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+        }
+        .sidebar-toggle:hover {
+            background-color: #f0f9eb;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        /* 隐藏滚动条但保持功能 */
+        .sidebar-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar-content::-webkit-scrollbar-thumb {
+            background-color: #ddd;
+            border-radius: 3px;
+        }
+
+        .toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc-item {
+            margin: 0;
+        }
+
+        .toc-link {
+            display: block;
+            padding: 10px 20px;
+            color: #555;
+            text-decoration: none;
+            font-size: 0.95em;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .toc-link:hover {
+            background-color: #f8f9fa;
+            color: #3498db;
+        }
+
+        .toc-link.active {
+            background-color: #e8f4fc;
+            color: #3498db;
+            border-left-color: #3498db;
+            font-weight: bold;
+        }
+
+        /* 折叠状态下的样式调整 */
+        .sidebar.collapsed .sidebar-title {
+            display: none;
+        }
+        .sidebar.collapsed .toc-link {
+            padding: 10px;
+            text-align: center;
+        }
+        .sidebar.collapsed .toc-link span {
+            display: none; /* 隐藏文字 */
+        }
+        .sidebar.collapsed .toc-link::before {
+            content: "📑"; /* 显示图标 */
+            font-size: 1.2em;
+        }
+        .sidebar.collapsed .sidebar-header {
+            justify-content: center;
+            padding: 0;
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            min-width: 0; /* 防止内容溢出 */
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+        }
+        .chapter-container {
+            background: #fff;
+            margin-bottom: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border-left: 6px solid #3498db;
+        }
+        .chapter-header {
+            background-color: #ecf0f1;
+            padding: 15px 25px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: center; /* 居中标题 */
+            align-items: center;
+        }
+        .chapter-header h2 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.5em;
+            text-align: center; /* 居中标题文本 */
+            width: 100%;
+        }
+        .content-body {
+            padding: 25px;
+        }
+        .sub-section {
+            margin-bottom: 25px;
+        }
+        .sub-title {
+            font-weight: bold;
+            color: #2980b9;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: block;
+            border-bottom: 1px dashed #bdc3c7;
+            padding-bottom: 5px;
+        }
+        .instruction-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .instruction-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 0.95em;
+        }
+        .instruction-list li::before {
+            content: "👉";
+            position: absolute;
+            left: 0;
+            color: #e74c3c;
+        }
+
+        pre {
+            margin: 0;
+            color: #98c379;
+            font-family: Consolas, monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .must-have {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            font-size: 0.7em;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        /* 业务流程图专用样式 */
+        .process-demo-container {
+            background: #f8fafc;
+            margin: 20px 0 30px 0;
+            border-radius: 5px;
+            box-shadow: none;
+            border-left: 3px solid #b2bec3;
+            padding: 0;
+        }
+        .process-demo-header {
+            background: #f1f2f6;
+            padding: 10px 18px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .process-demo-header h2 {
+            font-size: 1.1em;
+            color: #636e72;
+            margin: 0;
+            text-align: left;
+            font-weight: normal;
+        }
+        .process-demo-body {
+            padding: 15px 18px 18px 18px;
+        }
+        .process-demo-tips {
+            background: #f9f9fb;
+            border-left: 2px solid #b2bec3;
+            padding: 8px 15px;
+            margin-bottom: 10px;
+            font-size: 0.97em;
+            color: #636e72;
+        }
+
+        .process-demo-code-area {
+            background: #f4f6fb;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            border: 1px solid #e0e0e0;
+        }
+        .process-demo-code-header {
+            color: #888;
+            font-size: 0.85em;
+            margin-bottom: 3px;
+        }
+        .process-demo-code-area pre {
+            background: none;
+            color: #4b6584;
+            font-size: 0.92em;
+            margin: 0;
+            font-family: Consolas, monospace;
+            white-space: pre-wrap;
+        }
+
+        /* 教程步骤样式 */
+        .tutorial-step {
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 3px solid #dfe6e9;
+        }
+        .tutorial-step-title {
+            font-weight: bold;
+            color: #2d3436;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .tutorial-step-content {
+            font-size: 0.95em;
+            color: #636e72;
+        }
+        .tutorial-link {
+            color: #0984e3;
+            text-decoration: none;
+            border-bottom: 1px dotted #0984e3;
+        }
+        .tutorial-link:hover {
+            color: #00cec9;
+        }
+
+        /* 统一图片样式 */
+        .content-body img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: 15px auto;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* 文本示例区域样式 */
+        .text-example-area {
+            background: #f0f9eb;
+            border-left: 4px solid #67c23a;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+        .text-example-header {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .text-example-header::before {
+            content: "✅";
+            margin-right: 8px;
+        }
+        .text-example-content {
+            font-size: 0.95em;
+            color: #555;
+        }
+        .text-example-content ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .text-example-content li {
+            margin-bottom: 8px;
+        }
+
+        /* 强烈提示样式 */
+        .writing-tip {
+            background-color: #fff8e1;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #856404;
+            font-size: 0.95em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .writing-tip strong {
+            color: #d39e00;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+        .writing-tip::before {
+            content: "🔥";
+            margin-right: 5px;
+            font-size: 1.2em;
+            vertical-align: middle;
+        }
+
+        /* 侧边栏底部作者信息 */
+        .sidebar-footer {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            background-color: #f9f9fb;
+            font-size: 0.85em;
+            color: #666;
+            text-align: center;
+        }
+
+        /* 底部收起按钮样式 */
+        .sidebar-bottom-toggle {
+            background: #fff;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            color: #666;
+            font-size: 0.9em;
+            padding: 8px 0;
+            margin-top: 15px;
+            border-radius: 4px;
+            width: 100%;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .sidebar-bottom-toggle:hover {
+            background-color: #f0f9eb;
+            color: #3498db;
+            border-color: #3498db;
+        }
+
+        /* 页面底部样式 */
+        .page-footer {
+            margin-top: 50px;
+            padding: 40px 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            background-color: #f8f9fa;
+        }
+        .footer-qrcode {
+            width: 240px;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 10px;
+            background: #fff;
+        }
+        .footer-desc {
+            font-size: 1em;
+            color: #555;
+            margin: 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-title" id="sidebar-title">论文导航</span>
+            <button class="sidebar-toggle" id="sidebar-toggle" title="折叠/展开目录">◀</button>
+        </div>
+        <div class="sidebar-content">
+            <ul class="toc-list" id="toc-list">
+                <!-- 目录项将由 JS 动态生成 -->
+            </ul>
+        </div>
+        <div class="sidebar-footer">
+            <button class="sidebar-bottom-toggle" id="sidebar-bottom-toggle" title="收起目录">◀ 收起目录</button>
+        </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+
+    <h1>毕业设计论文分章节填空指南</h1>
+    <p style="text-align: center; color: #666;">请同学们严格按照以下小标题结构进行填充，切勿离题。</p>
+
+    <div class="chapter-container">
+        <div class="chapter-header">
+            <h2>第 1 章 绪论</h2>
+        </div>
+        <div class="content-body">
+            <div class="sub-section">
+                <span class="sub-title">1.1 研究背景 <span class="must-have">必写</span></span>
+                <ul class="instruction-list">
+                    <li>写宏观环境：国家是否出台了相关数字化/互联网+的政策？</li>
+                    <li>写行业痛点：传统人工管理模式有哪些弊端（如效率低、易出错、数据难统计）？</li>
+                    <li><strong>核心要求：</strong> 必须引用数据或具体现象说明“为什么现在需要做这个系统”。</li>
+                </ul>
+            </div>
+            
+            <div class="sub-section">
+                <span class="sub-title">1.2 国内外研究现状</span>
+                <ul class="instruction-list">
+                    <li>国内现状：国内同类软件发展到了什么程度？有哪些大厂在做？</li>
+                    <li>国外现状：国外是否有成熟的开源方案？</li>
+                    <li><strong>核心要求：</strong> 至少引用 5-8 篇参考文献的观点，指出现有系统的不足。</li>
+                </ul>
+            </div>
+
+            <div class="sub-section">
+                <span class="sub-title">1.3 研究目的与意义</span>
+                <ul class="instruction-list">
+                    <li>目的：本系统旨在实现xx流程的自动化/智能化。</li>
+                    <li>意义：实际应用后能节省多少人力，或者提高多少效率。</li>
+                </ul>
+            </div>
+
+
+            </div>
+        </div>
+
+
+    <div class="chapter-container">
+        <div class="chapter-header">
+            <h2>第 2 章 相关技术与可行性分析</h2>
+        </div>
+        <div class="content-body">
+
+           <div class="sub-section">
+               <span class="sub-title">2.1 相关技术简介 </span>
+               <ul class="instruction-list">
+                   <li><strong>后端技术（如 SpringBoot）：</strong> 简述特点（轻量、自动配置），并说明为什么适合本项目（快速开发、生态好）。</li>
+                   <li><strong>前端技术（如 Vue/React）：</strong> 简述组件化开发的优势，以及前后端分离的好处。</li>
+                   <li><strong>数据库（MySQL）：</strong> 强调其开源免费、性能稳定，足以支撑本系统的并发量。</li>
+                   <li><strong>其他（MyBatis/Redis等）：</strong> 简要带过即可。</li>
+                   <li>👉 <em>注意：不要大段复制百度百科的定义，要结合“为什么选它”来写。</em></li>
+                   <li>
+                       <strong>示例 — 写法对比：</strong><br>
+                       <span style="color:#e74c3c;">❌ 错误写法：</span> Vue.js 是一个用于构建用户界面的渐进式框架。它设计为可以自底向上逐层应用。（纯定义，像说明书）<br>
+                       <span style="color:#2ecc71;">✅ 正确写法：</span> 本系统前端采用 Vue.js 框架。由于本系统交互逻辑复杂，需要频繁更新页面数据（结合项目），Vue 的双向数据绑定特性能够有效减少 DOM 操作，提高页面响应速度（说明优势），因此适合本项目的开发。
+                   </li>
+               </ul>
+           </div>
+            <hr style="border:0; border-top:1px dashed #eee; margin: 20px 0;">
+
+            <div class="sub-section">
+                <span class="sub-title">2.2 可行性分析</span>
+                <p style="font-size:0.9em; color:#666;">在此基础上分析项目能否落地：</p>
+                <ul class="instruction-list">
+                    <li><strong>2.2.1 技术可行性：</strong> 基于上述 2.1 介绍的技术，说明团队（你自己）是否已掌握，或者有丰富的文档支持开发。</li>
+                    <li><strong>2.2.2 经济可行性：</strong> 硬件成本（普通PC）、软件成本（开源免费）。</li>
+                    <li><strong>2.2.3 操作可行性：</strong> 系统界面友好，用户无需复杂培训。</li>
+                </ul>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <div class="chapter-container">
+        <div class="chapter-header">
+            <h2>第 3 章 需求分析</h2>
+        </div>
+        <div class="content-body">
+            <div class="sub-section">
+                <span class="sub-title">3.1 业务流程分析</span>
+                <ul class="instruction-list">
+                    <li>描述**核心业务**的数据流向（例如：用户下单 -> 商家接单 -> 发货）。</li>
+                    <li><strong>要求：</strong> 必须搭配**业务流程图**。</li>
+                </ul>
+            </div>
+
+            <!-- 业务流程图（简化版示例）：图书借阅，样式弱化版 -->
+            <div class="process-demo-container">
+                <div class="process-demo-header">
+                    <h2>业务流程图（简化版示例）：图书借阅</h2>
+                </div>
+                <div class="process-demo-body">
+                    <div class="process-demo-tips">
+                        <div style="font-weight:bold; margin-bottom:15px; color:#2c3e50; font-size:1.05em;">
+                            🎓 新手必看：3步搞定流程图（保姆级教程）
+                        </div>
+
+                        <div class="tutorial-step">
+                            <span class="tutorial-step-title">第一步：让 AI 帮你写代码</span>
+                            <div class="tutorial-step-content">
+                                把你的业务逻辑告诉 AI（如 ChatGPT/DeepSeek），让它生成 PlantUML 代码。<br>
+                                <span style="background:#fff3cd; padding:2px 5px; border-radius:3px; font-size:0.9em; display:inline-block; margin-top:5px;">
+                                    🤖 <strong>提示词示例：</strong> "请帮我画一个[图书借阅]的业务流程图，使用 PlantUML 泳道图语法，包含[读者]和[系统]两个角色。注意生成的图要满足UML 2.0 或更高版本的标准规范"
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="tutorial-step">
+                            <span class="tutorial-step-title">第二步：在线生成图片</span>
+                            <div class="tutorial-step-content">
+                                复制 AI 生成的代码，打开在线工具进行渲染。<br>
+                                🛠️ <strong>推荐工具：</strong> <a href="https://www.planttext.com/" target="_blank" class="tutorial-link">PlantText</a> 或 <a href="http://www.plantuml.com/plantuml" target="_blank" class="tutorial-link">PlantUML官网</a>
+                            </div>
+                        </div>
+
+                        <div class="tutorial-step">
+                            <span class="tutorial-step-title">第三步：微调与导出</span>
+                            <div class="tutorial-step-content">
+                                如果流程有误，直接修改代码中的文字；确认无误后，右键保存图片或截图粘贴到论文中。
+                            </div>
+                        </div>
+                    </div>
+
+                    <img src="img_2026/liuchengtu.png" alt="图书借阅业务流程图"/>
+                    PlantUML 代码示例
+                    <div class="process-demo-code-area">
+                        <div class="process-demo-code-header">
+
+                        </div>
+<pre>
+@startuml
+title 图书借阅标准活动图
+
+|读者|
+start
+:挑选图书并出示借阅证;
+
+|系统|
+' 判定节点
+if () then ([证件无效])
+  |读者|
+  :提示证件异常;
+  stop
+else ([证件有效])
+  |系统|
+  :查询图书库存;
+  if () then ([库存不足])
+    |读者|
+    :提示图书已借完;
+    stop
+  else ([库存充足])
+    |系统|
+    :生成借阅记录;
+    :更新库存信息;
+    |读者|
+    :领取图书并离开;
+  endif
+endif
+
+stop
+@enduml
+</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-section">
+                <span class="sub-title">3.2 功能需求分析 <span class="must-have">核心</span></span>
+                <ul class="instruction-list">
+                    <li>按角色分类写（管理员能做什么？用户能做什么？）。</li>
+                    <li>例如：管理员功能包括用户管理、商品管理、订单审核等。</li>
+                    <li><strong>要求：</strong> 必须搭配**用例图(Use Case Diagram)**（画法参考流程图的方法）。</li>
+                </ul>
+
+                <img src="https://uml.planttext.com/plantuml/svg/SoWkIImgAStDuUNAIKqhKIZ9LoZAJCyeKKZ9B4fDBidCp-FbIamkoIzIK7esSztBXbdFfwnurh5TII6nMA6qEBK8BljytSBd4zgUJfm1bafCoSq4wWGPaPYNdfCAbD-y-_dk-K-xvhzetljYtyxdKtkK5AfvkHGKD9xFtFrqxzHdcrSyRUlH19kRR0YMUBQr_yNoZgTJsvvEReHA684bdkpeVjexzTcKzKzspu1A68CbNgnR19I0E0KgOGAn0-ng50bJNgvQNYwG7nHqTUqWbYBnZ51uGEF1Na8eHUQQe7A19ZkavgK00nK0" alt="用例图" onerror="this.src='img_2026/usecase.png'; this.onerror=null;"/>
+            </div>
+
+            <div class="sub-section">
+                <span class="sub-title">3.3 非功能需求</span>
+                <ul class="instruction-list">
+                    <li><strong>性能需求：</strong> 规定系统的响应时间、并发数等指标。</li>
+                    <li><strong>安全性：</strong> 说明数据加密、权限控制、防攻击措施。</li>
+                    <li><strong>可靠性：</strong> 说明系统的稳定性、备份恢复机制。</li>
+                    <li><strong>兼容性：</strong> 说明支持的浏览器、设备类型。</li>
+                </ul>
+
+                <!-- 示例区域 -->
+                <div class="text-example-area">
+                    <div class="text-example-header">写法示例（分析口吻版）</div>
+                    <div class="text-example-content">
+                        <ul>
+                            <li>
+                                <strong>性能需求分析：</strong>
+                                本系统主要面向全校师生使用，考虑到在借阅高峰期（如期末或开学初）可能出现的高并发访问情况，系统需保证在高负载下的稳定性。具体指标要求：支持至少 50 个用户同时在线操作，首页及核心业务页面（如图书检索、借阅办理）加载时间不超过 3 秒，以确保良好的用户体验。
+                            </li>
+                            <li>
+                                <strong>安全性分析：</strong>
+                                由于系统中存储了大量读者的个人隐私信息（如学号、手机号）以及图书资产数据，安全性至关重要。系统需采用 Spring Security 框架进行权限控制，用户密码必须经过 BCrypt 加密存储。此外，所有敏感数据传输均需通过 HTTPS 协议加密，并对前端输入进行严格过滤，防止 SQL 注入和 XSS 跨站脚本攻击。
+                            </li>
+                            <li>
+                                <strong>可靠性分析：</strong>
+                                图书馆业务具有持续性特点，要求系统具备 7×24 小时连续运行能力。为防止数据丢失，系统需建立自动备份机制，每日凌晨自动备份数据库。当服务器发生故障时，应能在 30 分钟内完成备用节点的切换与数据恢复，最大程度降低对借阅业务的影响。
+                            </li>
+                            <li>
+                                <strong>兼容性分析：</strong>
+                                考虑到师生使用的设备多样化，本系统前端界面需采用响应式布局（Responsive Design），能够自适应 PC 端、平板及手机端等不同分辨率的屏幕。同时，系统应全面兼容 Chrome、Firefox、Edge 等主流浏览器，确保在不同环境下功能均能正常使用。
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="chapter-container">
+        <div class="chapter-header">
+            <h2>第 4 章 系统设计</h2>
+        </div>
+        <div class="content-body">
+
+            <!-- 4.1 整体设计 -->
+            <div class="sub-section">
+                <span class="sub-title">4.1 整体设计</span>
+                <ul class="instruction-list">
+                    <li><strong>4.1.1 系统架构设计：</strong> 说明系统采用的架构模式（如 B/S 架构、MVC 模式、前后端分离架构）。需画出<strong>系统架构图</strong>（展示表现层、业务逻辑层、数据访问层等）。</li>
+                    <li><strong>4.1.2 功能结构设计：</strong> 将需求分析中的功能进一步细化，画出<strong>系统功能结构图</strong>，清晰展示系统的模块划分。</li>
+                </ul>
+
+                <div class="text-example-area">
+                    <div class="text-example-header">写法示例：系统功能结构描述</div>
+                    <div class="text-example-content">
+                        <p>本系统主要划分为<strong>读者端</strong>和<strong>管理员端</strong>两大功能模块（我学院要求三个以及以上角色）：</p>
+                        <ul>
+                            <li><strong>读者端：</strong> 包含图书查询（支持模糊搜索）、借阅管理（查看当前借阅、历史记录）、个人中心（修改密码、个人信息维护）等功能。</li>
+                            <li><strong>管理员端：</strong> 包含图书管理（图书上架、下架、修改）、用户管理（读者账号审核、禁用）、借阅审核（处理借阅请求）、数据统计（借阅量统计图表）等功能。</li>
+                        </ul>
+                        <p style="color:#666; font-size:0.9em; margin-top:10px;">（注：此处需配合功能结构图插入论文中）</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr style="border:0; border-top:1px dashed #eee; margin: 20px 0;">
+
+            <!-- 4.2 详细设计 -->
+            <div class="sub-section">
+                <span class="sub-title">4.2 详细设计</span>
+                <ul class="instruction-list">
+                    <li><strong>核心模块流程设计：</strong> 针对关键业务（如“借书”、“下单”），画出<strong>流程图或者</strong><strong>时序图</strong>（Sequence Diagram）或<strong>活动图</strong>，展示交互细节。</li>
+                    <li><strong>类设计（可选）：</strong> 如果是面向对象设计较强的系统，可以补充类图。</li>
+                </ul>
+                <div class="writing-tip">
+                    <strong>🔥 写作技巧（前后呼应）：</strong>
+                    此处设计的每一个核心业务流程（如“图书借阅”），都必须在第 5 章有对应的“图书借阅功能实现”小节，形成“设计 -> 实现”的闭环逻辑。
+                </div>
+            </div>
+
+            <hr style="border:0; border-top:1px dashed #eee; margin: 20px 0;">
+
+            <!-- 4.3 数据库设计 -->
+            <div class="sub-section">
+                <span class="sub-title">4.3 数据库设计 <span class="must-have">重难点</span></span>
+                <ul class="instruction-list">
+                    <li><strong>4.3.1 概念结构设计：</strong> 必须放 <strong>E-R 图</strong>（实体关系图），展示实体、属性及实体间的关系（1:1, 1:N, M:N）。</li>
+                    <li><strong>4.3.2 逻辑结构设计：</strong> 必须放<strong>数据库表结构表格</strong>。每个表需包含：字段名、数据类型、长度、是否主键/外键、是否为空、备注说明。</li>
+                </ul>
+
+                <!-- E-R图示例 -->
+                <div class="text-example-area">
+                    <div class="text-example-header">写法示例：数据库概念设计（E-R图说明）</div>
+                    <div class="text-example-content">
+                        <p>根据需求分析，本系统主要包含以下实体及其关系：</p>
+                        <ul>
+                            <li><strong>用户实体：</strong> 属性包含用户ID、用户名、密码、联系方式等。</li>
+                            <li><strong>图书实体：</strong> 属性包含图书ID、书名、作者、出版社、库存数量等。</li>
+                            <li><strong>借阅记录实体：</strong> 属性包含记录ID、借阅时间、归还时间、状态等。</li>
+                        </ul>
+                        <p><strong>实体间关系：</strong> 一个用户可以借阅多本图书（1:N），一本图书可以被多个用户借阅（但在同一时间只能被一人借阅，通过库存控制）。用户与借阅记录之间是 1:N 关系。</p>
+                        <p style="color:#666; font-size:0.9em; margin-top:10px;">（注：此处需插入完整的 E-R 关系图）</p>
+                    </div>
+                </div>
+
+                <!-- 数据库表结构示例 -->
+                <div class="text-example-area">
+                    <div class="text-example-header">示例：数据库表结构表格（用户表 t_user）</div>
+                    <div class="text-example-content">
+                        <table style="width:100%; border-collapse: collapse; font-size: 0.9em;">
+                            <tr style="background-color: #f2f2f2;">
+                                <th style="border: 1px solid #ddd; padding: 8px;">字段名</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">数据类型</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">长度</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">约束</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">说明</th>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;">user_id</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">INT</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">11</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">主键, 自增</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">用户ID</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;">username</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">VARCHAR</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">50</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">非空, 唯一</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">用户名</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chapter-container">
+        <div class="chapter-header">
+            <h2>第 5 章 系统实现</h2>
+        </div>
+        <div class="content-body">
+            <p style="font-size:0.9em; color:#e74c3c; background:#fff0f0; padding:10px; border-radius:4px; border-left:4px solid #e74c3c;">
+                ⚠️ <strong>注意：</strong> 不要把代码都贴上来！只贴<strong>核心逻辑</strong>（如复杂的算法、关键的业务处理）。
+            </p>
+
+            <div class="sub-section">
+                <span class="sub-title">5.1 开发环境搭建</span>
+                <ul class="instruction-list">
+                    <li>简要介绍系统的开发环境和运行环境。</li>
+                    <li><strong>建议使用表格形式展示：</strong></li>
+                </ul>
+                <div class="text-example-area">
+                    <div class="text-example-header">示例：开发环境配置表</div>
+                    <div class="text-example-content">
+                        <table style="width:100%; border-collapse: collapse; font-size: 0.9em;">
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px; background: #f9f9f9; width: 30%;"><strong>操作系统</strong></td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">Windows 10 / 11</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px; background: #f9f9f9;"><strong>开发工具 (IDE)</strong></td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">IntelliJ IDEA 2023.1</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px; background: #f9f9f9;"><strong>JDK 版本</strong></td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">JDK 1.8 / 17</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px; background: #f9f9f9;"><strong>数据库</strong></td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">MySQL 8.0</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-section">
+                <span class="sub-title">5.2 核心功能实现（分小节写）</span>
+                <ul class="instruction-list">
+                    <li><strong>5.2.1 登录注册模块：</strong> 展示登录界面截图，简述登录流程（如：前端校验 -> 发送请求 -> 后端验证 -> 返回 Token）。</li>
+                    <li><strong>5.2.2 核心业务模块（如图书借阅）：</strong> 展示业务界面截图，贴出关键的 Service 层代码，并配合文字解释。</li>
+                    <li><strong>要求：</strong> 图文并茂，每个功能至少配 1 张图。</li>
+                </ul>
+                <div class="writing-tip">
+                    <strong>🔥 写作技巧（前后呼应）：</strong>
+                    本节的小标题应与 4.2 节中的设计模块保持一致。例如：4.2 节设计了“图书借阅流程”，本节就写“5.2.x 图书借阅功能实现”。
+                </div>
+
+
+
+                <div class="text-example-area">
+                    <div class="text-example-header">写法示例：登录功能实现描述</div>
+                    <div class="text-example-content">
+                        <p><strong>登录模块实现流程：</strong></p>
+                        <p>用户在登录界面输入账号和密码，点击登录按钮。前端首先进行非空校验，随后通过 Axios 发送 POST 请求将加密后的数据提交到后端 <code>/api/login</code> 接口。后端 Controller 接收请求后，调用 Spring Security 进行身份认证。若认证通过，系统生成 JWT Token 并返回给前端；若失败，则返回错误提示信息。前端接收到 Token 后将其存储在 LocalStorage 中，并跳转至系统首页。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-example-area">
+                <div class="text-example-header">写法示例：核心业务流程描述</div>
+                <div class="text-example-content">
+                    <p><strong>图书借阅业务流程如下：</strong></p>
+                    <p>图书借阅业务的实现流程如下：用户在前端页面点击"立即借阅"按钮后，前端将用户ID和图书ID封装为JSON数据发送至后端接口；Controller层接收请求后，调用Service层进行业务处理；Service层首先校验用户状态是否正常，随后查询图书库存是否充足；若校验通过，系统扣减图书库存，并在数据库中生成一条借阅记录（状态为"借出"）；最后，后端返回操作成功信息，前端提示用户"借阅成功"。</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chapter-container">
+        <div class="chapter-header">
+            <h2>第 6 章 系统测试</h2>
+        </div>
+        <div class="content-body">
+            <div class="sub-section">
+                <span class="sub-title">6.1 测试目的与环境</span>
+                <ul class="instruction-list">
+                    <li><strong>测试目的：</strong> 简述为什么要测试（如：发现潜在 Bug，验证功能是否符合需求，保证系统上线后的稳定性）。</li>
+                    <li><strong>测试环境：</strong> 说明测试使用的硬件（PC配置）和软件环境（浏览器版本、操作系统）。</li>
+                </ul>
+            </div>
+
+            <div class="sub-section">
+                <span class="sub-title">6.2 功能测试用例 <span class="must-have">必须有表</span></span>
+                <ul class="instruction-list">
+                    <li><strong>格式要求：</strong> 必须使用表格形式。</li>
+                    <li>表格列包含：测试模块、测试输入、预期结果、实际结果、结论（通过/不通过）。</li>
+                    <li>至少列出 10-15 个测试点，覆盖主要功能。</li>
+                </ul>
+
+                <div class="text-example-area">
+                    <div class="text-example-header">示例：功能测试用例表</div>
+                    <div class="text-example-content">
+                        <table style="width:100%; border-collapse: collapse; font-size: 0.9em;">
+                            <tr style="background-color: #f2f2f2;">
+                                <th style="border: 1px solid #ddd; padding: 8px;">测试模块</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">测试用例描述</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">预期结果</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">实际结果</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">结论</th>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;">登录模块</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">输入正确的用户名和密码</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">跳转至首页，显示用户信息</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">与预期一致</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; color: green;">通过</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;">登录模块</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">输入错误的密码</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">提示“用户名或密码错误”</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">与预期一致</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; color: green;">通过</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;">借阅模块</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">借阅库存为0的图书</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">提示“库存不足”，无法借阅</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">与预期一致</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; color: green;">通过</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-section">
+                <span class="sub-title">6.3 测试总结</span>
+                <ul class="instruction-list">
+                    <li>总结系统目前是否存在严重Bug，是否满足上线要求。</li>
+                    <li>例如：“经过上述测试，本系统核心功能运行稳定，未发现严重逻辑错误，基本满足设计需求...”</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="chapter-container">
+        <div class="chapter-header">
+            <h2>结论</h2>
+        </div>
+        <div class="content-body">
+            <div class="sub-section">
+                <ul class="instruction-list">
+                    <li><strong>第一部分（总结）：</strong> 用第一人称回顾全文工作（“本文完成了...设计了...实现了...”），强调系统的实际价值。</li>
+                    <li><strong>第二部分（不足与展望）：</strong> 诚实地写出系统的不足（如界面、并发、功能深度），并提出未来的改进方向。</li>
+
+                </ul>
+                <div class="text-example-area">
+                    <div class="text-example-header">写法示例：结论与展望（完整版）</div>
+                    <div class="text-example-content">
+                        <p>本文在分析了当前高校图书管理现状的基础上，设计并实现了一套基于 SpringBoot + Vue 的图书管理系统。本文首先完成了系统的需求分析，明确了读者和管理员的业务流程；其次设计了系统的总体架构和数据库结构，绘制了 E-R 图和数据表；随后实现了用户登录、图书借阅、归还、逾期提醒等核心功能；最后对系统进行了功能测试，验证了系统的稳定性和可用性。本系统的上线将有效解决传统人工管理效率低下的问题，提升图书馆的信息化管理水平。</p>
+                        <p>受限于个人技术水平和开发时间，本系统仍存在一些不足之处。例如，界面交互设计较为简单，移动端的适配体验还有待优化；同时，目前仅实现了基础的借阅功能，缺乏对读者阅读习惯的大数据分析和个性化推荐功能。在未来的学习和工作中，我计划引入协同过滤推荐算法，为读者推荐感兴趣的图书；同时开发微信小程序版本，方便读者随时随地查询馆藏信息。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页面底部二维码与描述 -->
+    <div class="page-footer">
+        <img src="img_2026/qrcode.png" alt="联系我" class="footer-qrcode"/>
+        <p class="footer-desc">
+            由于本人水平有限，只代表个人观点，如果有误可以联系我修改
+        </p>
+    </div>
+
+    </main>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tocList = document.getElementById('toc-list');
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('sidebar-toggle');
+
+        // 获取所有章节标题 (h2)
+        // 排除 sidebar 里的 h2 (如果有的话，虽然目前没有)
+        const chapters = document.querySelectorAll('.main-content .chapter-header h2');
+
+        chapters.forEach((header, index) => {
+            // 找到对应的容器，用于定位
+            // 优先找 chapter-container，如果没有则找 header 的父级
+            const container = header.closest('.chapter-container') || header.parentElement;
+
+            // 确保容器有 ID
+            if (!container.id) {
+                container.id = 'chapter-' + (index + 1);
+            }
+
+            const li = document.createElement('li');
+            li.className = 'toc-item';
+
+            const a = document.createElement('a');
+            a.href = '#' + container.id;
+            a.className = 'toc-link';
+
+            // 创建 span 包裹文字，方便折叠时隐藏
+            const span = document.createElement('span');
+            span.textContent = header.textContent.trim();
+            a.appendChild(span);
+
+            a.title = header.textContent.trim();
+
+            // 点击平滑滚动
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                // 移动端或小屏幕可能需要关闭侧边栏，这里暂不处理
+
+                const target = document.getElementById(container.id);
+                if (target) {
+                    // 考虑到 sticky header 或 padding，可能需要偏移
+                    const offset = 20;
+                    const bodyRect = document.body.getBoundingClientRect().top;
+                    const elementRect = target.getBoundingClientRect().top;
+                    const elementPosition = elementRect - bodyRect;
+                    const offsetPosition = elementPosition - offset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    // 更新 URL hash，但不跳转
+                    history.pushState(null, null, '#' + container.id);
+                }
+
+                // 更新激活状态
+                document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+                a.classList.add('active');
+            });
+
+            li.appendChild(a);
+            tocList.appendChild(li);
+        });
+
+        // 滚动监听，自动高亮当前章节
+        window.addEventListener('scroll', () => {
+            let currentId = '';
+            const scrollPos = window.scrollY + 100; // 偏移量
+
+            chapters.forEach(header => {
+                const container = header.closest('.chapter-container') || header.parentElement;
+                if (container.offsetTop <= scrollPos) {
+                    currentId = container.id;
+                }
+            });
+
+            if (currentId) {
+                document.querySelectorAll('.toc-link').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + currentId) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+
+        // 折叠功能
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            if (sidebar.classList.contains('collapsed')) {
+                toggleBtn.innerHTML = '☰'; // 汉堡菜单图标
+                toggleBtn.title = "展开目录";
+            } else {
+                toggleBtn.innerHTML = '◀'; // 收起图标
+                toggleBtn.title = "折叠目录";
+            }
+        });
+
+        // 底部收起按钮功能
+        const bottomToggleBtn = document.getElementById('sidebar-bottom-toggle');
+        if (bottomToggleBtn) {
+            bottomToggleBtn.addEventListener('click', () => {
+                // 复用 toggleBtn 的点击逻辑
+                toggleBtn.click();
+            });
+        }
+    });
+</script>
+
+
+</body>
+</html>
+
+
