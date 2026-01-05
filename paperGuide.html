@@ -238,26 +238,45 @@
         }
 
         /* 业务流程图专用样式 */
-        .process-demo-container {
+        details.process-demo-container {
             background: #f8fafc;
             margin: 20px 0 30px 0;
             border-radius: 5px;
             box-shadow: none;
             border-left: 3px solid #b2bec3;
             padding: 0;
+            transition: all 0.3s;
         }
-        .process-demo-header {
+        summary.process-demo-header {
             background: #f1f2f6;
             padding: 10px 18px;
             border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+            outline: none;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .process-demo-header h2 {
+        summary.process-demo-header::-webkit-details-marker {
+            display: none;
+        }
+        summary.process-demo-header h2 {
             font-size: 1.1em;
             color: #636e72;
             margin: 0;
             text-align: left;
             font-weight: normal;
         }
+        summary.process-demo-header::after {
+            content: "（点击展开教程）";
+            font-size: 0.85em;
+            color: #999;
+        }
+        details[open] summary.process-demo-header::after {
+            content: "（点击收起）";
+        }
+
         .process-demo-body {
             padding: 15px 18px 18px 18px;
         }
@@ -328,23 +347,48 @@
         }
 
         /* 文本示例区域样式 */
-        .text-example-area {
+        details.text-example-area {
             background: #f0f9eb;
             border-left: 4px solid #67c23a;
-            padding: 15px;
+            padding: 10px 15px;
             margin-top: 15px;
             border-radius: 4px;
+            transition: all 0.3s;
         }
-        .text-example-header {
+        details.text-example-area[open] {
+            padding-bottom: 15px;
+        }
+        summary.text-example-header {
             font-weight: bold;
             color: #2c3e50;
-            margin-bottom: 10px;
             display: flex;
             align-items: center;
+            cursor: pointer;
+            outline: none;
+            list-style: none;
         }
-        .text-example-header::before {
+        summary.text-example-header::-webkit-details-marker {
+            display: none;
+        }
+        summary.text-example-header::before {
             content: "✅";
             margin-right: 8px;
+        }
+        summary.text-example-header::after {
+            content: "（点击展开示例）";
+            font-size: 0.85em;
+            color: #67c23a;
+            margin-left: auto;
+            font-weight: normal;
+        }
+        details[open] summary.text-example-header {
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #c2e7b0;
+            padding-bottom: 5px;
+        }
+        details[open] summary.text-example-header::after {
+            content: "（点击收起）";
+            color: #999;
         }
         .text-example-content {
             font-size: 0.95em;
@@ -554,11 +598,11 @@
                 </ul>
             </div>
 
-            <!-- 业务流程图（简化版示例）：图书借阅，样式弱化版 -->
-            <div class="process-demo-container">
-                <div class="process-demo-header">
-                    <h2>业务流程图（简化版示例）：图书借阅</h2>
-                </div>
+            <!-- 业务流程图画法：图书借阅，样式弱化版 -->
+            <details class="process-demo-container">
+                <summary class="process-demo-header">
+                    <h2>业务流程图画法教程：图书借阅</h2>
+                </summary>
                 <div class="process-demo-body">
                     <div class="process-demo-tips">
                         <div style="font-weight:bold; margin-bottom:15px; color:#2c3e50; font-size:1.05em;">
@@ -632,7 +676,7 @@ stop
 </pre>
                     </div>
                 </div>
-            </div>
+            </details>
 
             <div class="sub-section">
                 <span class="sub-title">3.2 功能需求分析 <span class="must-have">核心</span></span>
@@ -642,7 +686,12 @@ stop
                     <li><strong>要求：</strong> 必须搭配**用例图(Use Case Diagram)**（画法参考流程图的方法）。</li>
                 </ul>
 
-                <img src="https://uml.planttext.com/plantuml/svg/SoWkIImgAStDuUNAIKqhKIZ9LoZAJCyeKKZ9B4fDBidCp-FbIamkoIzIK7esSztBXbdFfwnurh5TII6nMA6qEBK8BljytSBd4zgUJfm1bafCoSq4wWGPaPYNdfCAbD-y-_dk-K-xvhzetljYtyxdKtkK5AfvkHGKD9xFtFrqxzHdcrSyRUlH19kRR0YMUBQr_yNoZgTJsvvEReHA684bdkpeVjexzTcKzKzspu1A68CbNgnR19I0E0KgOGAn0-ng50bJNgvQNYwG7nHqTUqWbYBnZ51uGEF1Na8eHUQQe7A19ZkavgK00nK0" alt="用例图" onerror="this.src='img_2026/usecase.png'; this.onerror=null;"/>
+                <details class="text-example-area">
+                    <summary class="text-example-header">示例：用例图（Use Case Diagram）</summary>
+                    <div class="text-example-content">
+                        <img src="https://uml.planttext.com/plantuml/svg/SoWkIImgAStDuUNAIKqhKIZ9LoZAJCyeKKZ9B4fDBidCp-FbIamkoIzIK7esSztBXbdFfwnurh5TII6nMA6qEBK8BljytSBd4zgUJfm1bafCoSq4wWGPaPYNdfCAbD-y-_dk-K-xvhzetljYtyxdKtkK5AfvkHGKD9xFtFrqxzHdcrSyRUlH19kRR0YMUBQr_yNoZgTJsvvEReHA684bdkpeVjexzTcKzKzspu1A68CbNgnR19I0E0KgOGAn0-ng50bJNgvQNYwG7nHqTUqWbYBnZ51uGEF1Na8eHUQQe7A19ZkavgK00nK0" alt="用例图" onerror="this.src='img_2026/usecase.png'; this.onerror=null;"/>
+                    </div>
+                </details>
             </div>
 
             <div class="sub-section">
@@ -655,8 +704,8 @@ stop
                 </ul>
 
                 <!-- 示例区域 -->
-                <div class="text-example-area">
-                    <div class="text-example-header">写法示例（分析口吻版）</div>
+                <details class="text-example-area">
+                    <summary class="text-example-header">写法示例（分析口吻版）</summary>
                     <div class="text-example-content">
                         <ul>
                             <li>
@@ -677,7 +726,7 @@ stop
                             </li>
                         </ul>
                     </div>
-                </div>
+                </details>
             </div>
 
 
@@ -698,8 +747,8 @@ stop
                     <li><strong>4.1.2 功能结构设计：</strong> 将需求分析中的功能进一步细化，画出<strong>系统功能结构图</strong>，清晰展示系统的模块划分。</li>
                 </ul>
 
-                <div class="text-example-area">
-                    <div class="text-example-header">写法示例：系统功能结构描述</div>
+                <details class="text-example-area">
+                    <summary class="text-example-header">写法示例：系统功能结构描述</summary>
                     <div class="text-example-content">
                         <p>本系统主要划分为<strong>读者端</strong>和<strong>管理员端</strong>两大功能模块（我学院要求三个以及以上角色）：</p>
                         <ul>
@@ -708,7 +757,7 @@ stop
                         </ul>
                         <p style="color:#666; font-size:0.9em; margin-top:10px;">（注：此处需配合功能结构图插入论文中）</p>
                     </div>
-                </div>
+                </details>
             </div>
 
             <hr style="border:0; border-top:1px dashed #eee; margin: 20px 0;">
@@ -737,8 +786,8 @@ stop
                 </ul>
 
                 <!-- E-R图示例 -->
-                <div class="text-example-area">
-                    <div class="text-example-header">写法示例：数据库概念设计（E-R图说明）</div>
+                <details class="text-example-area">
+                    <summary class="text-example-header">写法示例：数据库概念设计（E-R图说明）</summary>
                     <div class="text-example-content">
                         <p>根据需求分析，本系统主要包含以下实体及其关系：</p>
                         <ul>
@@ -749,11 +798,63 @@ stop
                         <p><strong>实体间关系：</strong> 一个用户可以借阅多本图书（1:N），一本图书可以被多个用户借阅（但在同一时间只能被一人借阅，通过库存控制）。用户与借阅记录之间是 1:N 关系。</p>
                         <p style="color:#666; font-size:0.9em; margin-top:10px;">（注：此处需插入完整的 E-R 关系图）</p>
                     </div>
-                </div>
+                </details>
+
+                <!-- 插入的新内容：ER图拆分指南 -->
+                <details class="process-demo-container" style="border-left-color: #8e44ad; background: #fff; border: 1px solid #eee; border-left: 4px solid #8e44ad; margin-top: 15px;">
+                    <summary class="process-demo-header" style="background: #fbf6fd; cursor: pointer; padding: 10px 15px; outline: none;">
+                        <h2 style="color: #8e44ad; font-weight: bold; font-size: 1em; margin: 0;">🎓 专家建议：ER 图过大如何处理？</h2>
+                    </summary>
+                    <div class="process-demo-body" style="padding-top: 0;">
+                        <div style="height: 15px;"></div>
+                        <div class="process-demo-tips" style="border-left-color: #8e44ad; color: #555;">
+                            <strong>结论先行：</strong> 当 ER 图信息密集时，<strong>完全可以拆分为多幅 ER 子图</strong>。这是规范做法，前提是必须说明“整体—局部”的关系。
+                        </div>
+
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px;">
+                            <div style="flex: 1; min-width: 280px;">
+                                <h3 style="font-size: 1em; color: #8e44ad; border-bottom: 1px solid #e1bee7; padding-bottom: 5px; margin-top: 0;">✅ 标准拆分原则</h3>
+                                <ul class="instruction-list">
+                                    <li><strong>原则 1：按业务域拆分</strong><br><span style="font-size: 0.9em; color: #666;">推荐：用户权限、核心业务、辅助业务、基础数据。❌ 不推荐按表数量平均拆。</span></li>
+                                    <li><strong>原则 2：先总后分</strong><br><span style="font-size: 0.9em; color: #666;">一张简化的“整体 ER 图” + 多张详细的“局部 ER 子图”。</span></li>
+                                </ul>
+                            </div>
+                            <div style="flex: 1; min-width: 280px;">
+                                <h3 style="font-size: 1em; color: #8e44ad; border-bottom: 1px solid #e1bee7; padding-bottom: 5px; margin-top: 0;">🛠️ 画图技术规范</h3>
+                                <ul class="instruction-list">
+                                    <li>每张 ER 图 <strong>不超过 6–8 个实体</strong>。</li>
+                                    <li>实体命名与数据库表名一致。</li>
+                                    <li>关系基数（1:1 / 1:N / M:N）必须标注。</li>
+                                    <li>公共实体（如用户表）<strong>可在多张图中重复出现</strong>。</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3 style="font-size: 1em; color: #8e44ad; margin-top: 20px; border-bottom: 1px solid #e1bee7; padding-bottom: 5px;">📍 推荐的结构示例（学生照抄即可）</h3>
+                        <div style="background: #fff; padding: 15px; border: 1px solid #eee; border-radius: 4px; font-size: 0.95em;">
+                            <div style="margin-bottom: 10px;"><strong>图 4-1 系统总体 ER 图（简化版）</strong> <span style="color: #e74c3c; font-size: 0.85em;">👉 让老师一眼看懂轮廓</span><br><span style="color: #666; font-size: 0.9em;">要求：只保留核心实体、主要联系，不强制写字段。</span></div>
+                            <div style="margin-bottom: 10px;"><strong>图 4-2 用户与权限模块 ER 图</strong><br><span style="color: #666; font-size: 0.9em;">包含：用户、角色、权限、用户角色关系表。</span></div>
+                            <div style="margin-bottom: 10px;"><strong>图 4-3 核心业务模块 ER 图（重点）</strong><br><span style="color: #666; font-size: 0.9em;">包含：核心实体（如座位）、业务记录（如预约）、时间/状态等。</span></div>
+                            <div><strong>图 4-4 其他业务模块 ER 图</strong><br><span style="color: #666; font-size: 0.9em;">包含：辅助业务实体（如请假、失物招领）。</span></div>
+                        </div>
+
+                        <h3 style="font-size: 1em; color: #8e44ad; margin-top: 20px; border-bottom: 1px solid #e1bee7; padding-bottom: 5px;">📝 必须写的一段说明文字（老师最在意）</h3>
+                        <div class="process-demo-code-area">
+                            <div class="process-demo-code-header">⚠️ 有这段话，形式审查基本不会再卡：</div>
+                            <pre style="white-space: pre-wrap; color: #333; font-family: 'Microsoft YaHei', sans-serif;">由于系统涉及的数据实体较多，若在同一张 ER 图中全部展示将导致图形过于复杂、可读性较差。因此本文采用“总体—局部”的方式对 ER 图进行拆分设计。首先给出系统总体 ER 图，用于描述系统核心实体及其主要关系；随后按照业务模块分别绘制局部 ER 图，对各模块内部的数据结构和实体关系进行详细说明，以提高数据模型的清晰性和可读性。</pre>
+                        </div>
+
+                        <div style="margin-top: 20px; background: #e8f8f5; padding: 12px; border-radius: 4px; border-left: 4px solid #1abc9c;">
+                            <strong style="color: #16a085;">🗣️ 答辩话术（官方解释）：</strong><br>
+                            <span style="color: #2c3e50; font-size: 0.95em;">如果被问“为什么 ER 图拆成多张？”，请回答：<br>
+                            “为了避免单一 ER 图过于复杂，本文按照业务模块对 ER 图进行了拆分设计，在总体 ER 图的基础上，对各业务模块的数据结构进行了详细建模，这种方式更有利于系统数据结构的理解和维护。”</span>
+                        </div>
+                    </div>
+                </details>
 
                 <!-- 数据库表结构示例 -->
-                <div class="text-example-area">
-                    <div class="text-example-header">示例：数据库表结构表格（用户表 t_user）</div>
+                <details class="text-example-area">
+                    <summary class="text-example-header">示例：数据库表结构表格（用户表 t_user）</summary>
                     <div class="text-example-content">
                         <table style="width:100%; border-collapse: collapse; font-size: 0.9em;">
                             <tr style="background-color: #f2f2f2;">
@@ -779,7 +880,7 @@ stop
                             </tr>
                         </table>
                     </div>
-                </div>
+                </details>
             </div>
         </div>
     </div>
@@ -799,8 +900,8 @@ stop
                     <li>简要介绍系统的开发环境和运行环境。</li>
                     <li><strong>建议使用表格形式展示：</strong></li>
                 </ul>
-                <div class="text-example-area">
-                    <div class="text-example-header">示例：开发环境配置表</div>
+                <details class="text-example-area">
+                    <summary class="text-example-header">示例：开发环境配置表</summary>
                     <div class="text-example-content">
                         <table style="width:100%; border-collapse: collapse; font-size: 0.9em;">
                             <tr>
@@ -821,7 +922,7 @@ stop
                             </tr>
                         </table>
                     </div>
-                </div>
+                </details>
             </div>
 
             <div class="sub-section">
@@ -838,23 +939,23 @@ stop
 
 
 
-                <div class="text-example-area">
-                    <div class="text-example-header">写法示例：登录功能实现描述</div>
+                <details class="text-example-area">
+                    <summary class="text-example-header">写法示例：登录功能实现描述</summary>
                     <div class="text-example-content">
                         <p><strong>登录模块实现流程：</strong></p>
                         <p>用户在登录界面输入账号和密码，点击登录按钮。前端首先进行非空校验，随后通过 Axios 发送 POST 请求将加密后的数据提交到后端 <code>/api/login</code> 接口。后端 Controller 接收请求后，调用 Spring Security 进行身份认证。若认证通过，系统生成 JWT Token 并返回给前端；若失败，则返回错误提示信息。前端接收到 Token 后将其存储在 LocalStorage 中，并跳转至系统首页。</p>
                     </div>
-                </div>
+                </details>
             </div>
 
-            <div class="text-example-area">
-                <div class="text-example-header">写法示例：核心业务流程描述</div>
+            <details class="text-example-area">
+                <summary class="text-example-header">写法示例：核心业务流程描述</summary>
                 <div class="text-example-content">
                     <p><strong>图书借阅业务流程如下：</strong></p>
                     <p>图书借阅业务的实现流程如下：用户在前端页面点击"立即借阅"按钮后，前端将用户ID和图书ID封装为JSON数据发送至后端接口；Controller层接收请求后，调用Service层进行业务处理；Service层首先校验用户状态是否正常，随后查询图书库存是否充足；若校验通过，系统扣减图书库存，并在数据库中生成一条借阅记录（状态为"借出"）；最后，后端返回操作成功信息，前端提示用户"借阅成功"。</p>
 
                 </div>
-            </div>
+            </details>
         </div>
     </div>
 
@@ -879,8 +980,8 @@ stop
                     <li>至少列出 10-15 个测试点，覆盖主要功能。</li>
                 </ul>
 
-                <div class="text-example-area">
-                    <div class="text-example-header">示例：功能测试用例表</div>
+                <details class="text-example-area">
+                    <summary class="text-example-header">示例：功能测试用例表</summary>
                     <div class="text-example-content">
                         <table style="width:100%; border-collapse: collapse; font-size: 0.9em;">
                             <tr style="background-color: #f2f2f2;">
@@ -913,7 +1014,7 @@ stop
                             </tr>
                         </table>
                     </div>
-                </div>
+                </details>
             </div>
 
             <div class="sub-section">
@@ -937,13 +1038,13 @@ stop
                     <li><strong>第二部分（不足与展望）：</strong> 诚实地写出系统的不足（如界面、并发、功能深度），并提出未来的改进方向。</li>
 
                 </ul>
-                <div class="text-example-area">
-                    <div class="text-example-header">写法示例：结论与展望（完整版）</div>
+                <details class="text-example-area">
+                    <summary class="text-example-header">写法示例：结论与展望（完整版）</summary>
                     <div class="text-example-content">
                         <p>本文在分析了当前高校图书管理现状的基础上，设计并实现了一套基于 SpringBoot + Vue 的图书管理系统。本文首先完成了系统的需求分析，明确了读者和管理员的业务流程；其次设计了系统的总体架构和数据库结构，绘制了 E-R 图和数据表；随后实现了用户登录、图书借阅、归还、逾期提醒等核心功能；最后对系统进行了功能测试，验证了系统的稳定性和可用性。本系统的上线将有效解决传统人工管理效率低下的问题，提升图书馆的信息化管理水平。</p>
                         <p>受限于个人技术水平和开发时间，本系统仍存在一些不足之处。例如，界面交互设计较为简单，移动端的适配体验还有待优化；同时，目前仅实现了基础的借阅功能，缺乏对读者阅读习惯的大数据分析和个性化推荐功能。在未来的学习和工作中，我计划引入协同过滤推荐算法，为读者推荐感兴趣的图书；同时开发微信小程序版本，方便读者随时随地查询馆藏信息。</p>
                     </div>
-                </div>
+                </details>
             </div>
         </div>
     </div>
@@ -1074,5 +1175,4 @@ stop
 
 </body>
 </html>
-
 
