@@ -6,12 +6,35 @@
   <component name="ChangeListManager">
     <list default="true" id="a507d30e-b36f-40a1-833d-c25547767dad" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paperGuide.html" beforeDir="false" afterPath="$PROJECT_DIR$/paperGuide.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bishe.html" beforeDir="false" afterPath="$PROJECT_DIR$/bishe.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotChats">
+    <option name="panelChat">
+      <chat>
+        <option name="activeSessionId" value="378c05a0-325c-4a22-8dc9-cc09c7ded684" />
+        <option name="sessions">
+          <session>
+            <option name="chatType" value="PANEL" />
+            <option name="id" value="378c05a0-325c-4a22-8dc9-cc09c7ded684" />
+            <option name="modeId" value="Ask" />
+            <option name="modelType" value="builtin_family" />
+            <option name="modelValue" value="auto" />
+            <option name="targetType" value="LOCAL" />
+          </session>
+        </option>
+        <option name="type" value="PANEL" />
+      </chat>
+    </option>
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/Users/Mingo/OneDrive/桌面/aboutme" value="2lNiuNlVGYXFzoY5Cys8eXOxx2L" />
+    </persistenceIdMap>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -94,7 +117,9 @@
       <workItem from="1763370032314" duration="48000" />
       <workItem from="1763370264994" duration="150000" />
       <workItem from="1767143958940" duration="11076000" />
-      <workItem from="1767574023516" duration="1836000" />
+      <workItem from="1767574023516" duration="1927000" />
+      <workItem from="1767577574999" duration="24000" />
+      <workItem from="1779021263959" duration="379000" />
     </task>
     <servers />
   </component>
