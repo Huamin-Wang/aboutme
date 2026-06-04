@@ -52,6 +52,35 @@
                 radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 24%),
                 radial-gradient(circle at top right, rgba(124, 58, 237, 0.05), transparent 18%),
                 linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
+            position: relative;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: auto;
+            width: 42vw;
+            height: 42vw;
+            max-width: 420px;
+            max-height: 420px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(14px);
+            opacity: 0.55;
+        }
+
+        body::before {
+            top: -10vw;
+            left: -10vw;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.16) 0%, rgba(37, 99, 235, 0) 70%);
+        }
+
+        body::after {
+            right: -12vw;
+            bottom: 6vh;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.14) 0%, rgba(124, 58, 237, 0) 72%);
         }
 
         body.sidebar-open {
@@ -82,6 +111,7 @@
             padding: 24px;
             gap: 24px;
             align-items: start;
+            position: relative;
         }
 
         .sidebar {
@@ -289,12 +319,29 @@
             border: 1px solid rgba(216, 225, 236, 0.9);
             border-bottom: none;
             border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(244, 248, 255, 0.96));
+            background:
+                radial-gradient(circle at top right, rgba(37, 99, 235, 0.10), transparent 24%),
+                radial-gradient(circle at left center, rgba(124, 58, 237, 0.08), transparent 18%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(244, 248, 255, 0.98));
             box-shadow: var(--shadow);
             text-align: left;
             color: var(--text);
             font-size: clamp(1.9rem, 2.6vw, 2.8rem);
             line-height: 1.2;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content > h1::after {
+            content: "";
+            position: absolute;
+            right: 28px;
+            top: 20px;
+            width: 64px;
+            height: 64px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(124, 58, 237, 0.14));
+            transform: rotate(14deg);
         }
 
         .main-content > h1 + p {
@@ -303,7 +350,7 @@
             border: 1px solid rgba(216, 225, 236, 0.9);
             border-top: none;
             border-radius: 0 0 var(--radius-xl) var(--radius-xl);
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 250, 255, 0.96));
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 250, 255, 0.98));
             box-shadow: var(--shadow);
             text-align: left !important;
             color: var(--muted) !important;
@@ -319,6 +366,7 @@
             overflow: hidden;
             border: 1px solid rgba(216, 225, 236, 0.9);
             scroll-margin-top: 96px;
+            isolation: isolate;
         }
 
         .chapter-container::before {
@@ -331,6 +379,18 @@
             background: linear-gradient(180deg, #2563eb 0%, #60a5fa 100%);
         }
 
+        .chapter-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 110px;
+            height: 110px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.10) 0%, rgba(37, 99, 235, 0) 72%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
         .chapter-header {
             background: linear-gradient(180deg, #f8fbff 0%, #f3f7fd 100%);
             padding: 22px 26px 18px;
@@ -339,6 +399,8 @@
             justify-content: center;
             align-items: center;
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
 
         .chapter-header h2 {
@@ -392,6 +454,8 @@
 
         .content-body {
             padding: 24px;
+            position: relative;
+            z-index: 1;
         }
 
         .sub-section {
@@ -400,6 +464,7 @@
             background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
             border: 1px solid #edf2f7;
             border-radius: 20px;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.03);
         }
 
         .sub-title {
@@ -494,6 +559,7 @@
             vertical-align: middle;
             letter-spacing: 0.04em;
             box-shadow: 0 10px 20px rgba(239, 68, 68, 0.18);
+            transform: translateY(-1px);
         }
 
         details.process-demo-container,
@@ -773,7 +839,9 @@
             border: 1px solid rgba(216, 225, 236, 0.9);
             border-radius: var(--radius-xl);
             text-align: center;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 250, 255, 0.96));
+            background:
+                radial-gradient(circle at top center, rgba(37, 99, 235, 0.08), transparent 30%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 250, 255, 0.96));
             box-shadow: var(--shadow);
         }
 
@@ -801,18 +869,20 @@
 
             .mobile-topbar {
                 position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
+                top: max(8px, env(safe-area-inset-top));
+                left: 12px;
+                right: 12px;
                 height: var(--mobile-bar-height);
                 display: flex;
                 align-items: center;
                 gap: 12px;
                 padding: 10px 14px;
-                background: rgba(255, 255, 255, 0.88);
+                background: rgba(255, 255, 255, 0.82);
                 backdrop-filter: blur(18px);
                 -webkit-backdrop-filter: blur(18px);
-                border-bottom: 1px solid rgba(216, 225, 236, 0.9);
+                border: 1px solid rgba(216, 225, 236, 0.9);
+                border-radius: 20px;
+                box-shadow: 0 12px 28px rgba(15, 23, 42, 0.10);
                 z-index: 1400;
             }
 
@@ -820,8 +890,8 @@
                 width: 42px;
                 height: 42px;
                 border: 1px solid var(--primary-border);
-                border-radius: 14px;
-                background: var(--primary-soft);
+                border-radius: 16px;
+                background: linear-gradient(135deg, #eff5ff 0%, #eef3ff 100%);
                 color: var(--primary);
                 font-size: 1.1rem;
                 font-weight: 700;
@@ -829,6 +899,7 @@
                 align-items: center;
                 justify-content: center;
                 flex-shrink: 0;
+                box-shadow: 0 8px 18px rgba(37, 99, 235, 0.10);
             }
 
             .mobile-topbar-title {
@@ -836,6 +907,7 @@
                 font-weight: 800;
                 color: var(--text);
                 line-height: 1.2;
+                letter-spacing: 0.01em;
             }
 
             .mobile-sidebar-mask {
@@ -864,18 +936,20 @@
 
             .sidebar {
                 position: fixed;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                width: min(86vw, 360px);
-                height: 100vh;
-                border-radius: 0 24px 24px 0;
-                transform: translateX(-104%);
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+                top: auto;
+                width: auto;
+                height: min(72vh, 580px);
+                border-radius: 28px;
+                transform: translateY(calc(100% + 16px));
                 z-index: 1300;
+                box-shadow: 0 22px 48px rgba(15, 23, 42, 0.22);
             }
 
             body.sidebar-open .sidebar {
-                transform: translateX(0);
+                transform: translateY(0);
             }
 
             .sidebar.collapsed {
@@ -908,6 +982,14 @@
                 font-size: clamp(1.55rem, 6vw, 2rem);
             }
 
+            .main-content > h1::after {
+                right: 18px;
+                top: 16px;
+                width: 48px;
+                height: 48px;
+                border-radius: 16px;
+            }
+
             .main-content > h1 + p {
                 padding: 0 20px 20px;
                 border-radius: 0 0 22px 22px;
@@ -919,6 +1001,11 @@
                 margin-bottom: 14px;
                 border-radius: 20px;
                 scroll-margin-top: calc(var(--mobile-bar-height) + 18px);
+            }
+
+            .chapter-container::after {
+                width: 88px;
+                height: 88px;
             }
 
             .chapter-header {
@@ -1039,6 +1126,8 @@
 
             .mobile-topbar {
                 padding-inline: 12px;
+                left: 10px;
+                right: 10px;
             }
 
             .mobile-topbar-title {
@@ -1159,7 +1248,7 @@
         </div>
         <div class="content-body">
             <div class="sub-section">
-                <span class="sub-title">1.摘要结构拆解</span>
+                <span class="sub-title">摘要结构拆解</span>
                 <ul class="instruction-list">
                     <li><strong>研究背景与目的：</strong> 简要介绍研究的背景或目的，阐明问题的重要性或实际需求。</li>
                     <li><strong>技术架构与实现：</strong> 描述系统的技术架构、主要技术选型和设计模式，简要提到为什么选择这些技术。</li>
@@ -1213,8 +1302,8 @@
             </div>
 
 
-            </div>
         </div>
+    </div>
 
 
     <div class="chapter-container">
@@ -1223,21 +1312,21 @@
         </div>
         <div class="content-body">
 
-           <div class="sub-section">
-               <span class="sub-title">2.1 相关技术简介 </span>
-               <p style="font-size:0.95em; color:#555; margin-bottom:10px;">
-                   <strong>【写作指导】</strong> 梳理项目所采用的关键技术，并结合自身项目需求，阐明每项技术的选型理由。切忌空泛罗列定义或照搬网络资料，应体现出对技术与项目契合度的深入理解。
-               </p>
-               <ul class="instruction-list">
-                   <li><strong>2.1.1 后端开发技术：</strong> 请结合项目的业务复杂度、开发周期、团队技术栈等实际情况，说明为何选择 Spring Boot。例如：Spring Boot 提供自动配置和丰富的生态支持，适合需要快速开发和后期可扩展的系统。</li>
-                   <li><strong>2.1.2 前端开发技术：</strong> 结合项目的页面交互复杂度、数据实时性等需求，说明 Vue 或 React 的组件化、响应式等特性如何满足这些需求，并提升开发效率和用户体验。</li>
-                   <li><strong>2.1.3 数据库技术：</strong> 说明项目对数据存储的需求（如并发量、数据一致性等），并结合 MySQL 的开源、性能稳定、易于维护等优势，阐述其适用性。</li>
-                   <li><strong>2.1.4 辅助与中间件技术（可选）：</strong> 针对项目中涉及的数据访问、缓存等场景，简要说明这些技术的辅助作用及其选用理由。</li>
-                   <li>👉 <em>严禁仅写“XX 是什么”，必须结合“项目需求→技术特性→选型理由”三步逻辑展开。</em></li>
-               </ul>
+            <div class="sub-section">
+                <span class="sub-title">2.1 相关技术简介 </span>
+                <p style="font-size:0.95em; color:#555; margin-bottom:10px;">
+                    <strong>【写作指导】</strong> 梳理项目所采用的关键技术，并结合自身项目需求，阐明每项技术的选型理由。切忌空泛罗列定义或照搬网络资料，应体现出对技术与项目契合度的深入理解。
+                </p>
+                <ul class="instruction-list">
+                    <li><strong>2.1.1 后端开发技术：</strong> 请结合项目的业务复杂度、开发周期、团队技术栈等实际情况，说明为何选择 Spring Boot。例如：Spring Boot 提供自动配置和丰富的生态支持，适合需要快速开发和后期可扩展的系统。</li>
+                    <li><strong>2.1.2 前端开发技术：</strong> 结合项目的页面交互复杂度、数据实时性等需求，说明 Vue 或 React 的组件化、响应式等特性如何满足这些需求，并提升开发效率和用户体验。</li>
+                    <li><strong>2.1.3 数据库技术：</strong> 说明项目对数据存储的需求（如并发量、数据一致性等），并结合 MySQL 的开源、性能稳定、易于维护等优势，阐述其适用性。</li>
+                    <li><strong>2.1.4 辅助与中间件技术（可选）：</strong> 针对项目中涉及的数据访问、缓存等场景，简要说明这些技术的辅助作用及其选用理由。</li>
+                    <li>👉 <em>严禁仅写“XX 是什么”，必须结合“项目需求→技术特性→选型理由”三步逻辑展开。</em></li>
+                </ul>
 
 
-           </div>
+            </div>
             <hr style="border:0; border-top:1px dashed #eee; margin: 20px 0;">
 
             <div class="sub-section">
@@ -1255,7 +1344,7 @@
         </div>
     </div>
 
-    <div class="chapter-container chapter-highlight-notice">
+    <div class="chapter-container">
         <div class="chapter-header">
             <h2>第 3 章 需求分析</h2>
         </div>
@@ -1311,7 +1400,7 @@
                         <div class="process-demo-code-header">
 
                         </div>
-<pre>
+                        <pre>
 @startuml
 title 图书借阅标准活动图
 
@@ -1343,7 +1432,7 @@ endif
 
 stop
 @enduml
-</pre>
+                        </pre>
                     </div>
                 </div>
             </details>
@@ -1373,26 +1462,31 @@ stop
                     <li><strong>兼容性：</strong> 说明支持的浏览器、设备类型。</li>
                 </ul>
 
+                <div class="writing-tip">
+                    <strong>⚠️ 非功能需求不要写成空话：</strong>
+                    这里写的每一项指标，到了第 6 章都要能实际测试或验证。不要随意写“支持 50 并发”“7×24 小时稳定运行”“支持所有设备”“已启用 HTTPS”这类在个人电脑环境下难以证明的表述；如果写了，就必须真的能测、能演示、能截图说明。
+                </div>
+
                 <!-- 示例区域 -->
                 <details class="text-example-area">
-                    <summary class="text-example-header">写法示例（分析口吻版）</summary>
+                    <summary class="text-example-header">写法示例（可测试版）</summary>
                     <div class="text-example-content">
                         <ul>
                             <li>
                                 <strong>性能需求分析：</strong>
-                                本系统主要面向全校师生使用，考虑到在借阅高峰期（如期末或开学初）可能出现的高并发访问情况，系统需保证在高负载下的稳定性。具体指标要求：支持至少 50 个用户同时在线操作，首页及核心业务页面（如图书检索、借阅办理）加载时间不超过 3 秒，以确保良好的用户体验。
+                                本系统主要在普通个人电脑环境下进行开发与测试，因此性能指标应以本地可验证结果为主。建议写成：在 Windows 系统、主流浏览器和本地数据库环境下，系统首页、列表页、详情页等常用页面应能正常打开，页面响应时间一般不超过 3~5 秒；对新增、修改、删除、查询等常见操作，提交后应在可接受时间内返回结果，且页面不出现长时间卡顿或无响应现象。此类指标可通过手动操作、录屏或截图方式在测试章节中验证。
                             </li>
                             <li>
                                 <strong>安全性分析：</strong>
-                                由于系统中存储了大量读者的个人隐私信息（如学号、手机号）以及图书资产数据，安全性至关重要。系统需采用 Spring Security 框架进行权限控制，用户密码必须经过 BCrypt 加密存储。此外，所有敏感数据传输均需通过 HTTPS 协议加密，并对前端输入进行严格过滤，防止 SQL 注入和 XSS 跨站脚本攻击。
+                                安全性需求应尽量写成“能检查、能验证”的内容。例如：系统应设置登录校验机制，输入错误用户名或密码时能够给出提示；不同角色登录后只能访问各自权限范围内的菜单和功能，越权访问时系统应禁止操作；用户密码不应以明文形式存储；对新增、编辑、搜索等输入框应进行必要的非空校验或格式校验。以上内容均可通过登录测试、角色切换测试、数据库字段查看或表单输入测试进行验证。若项目本身没有部署 HTTPS，就不要在论文中硬写 HTTPS 加密。
                             </li>
                             <li>
                                 <strong>可靠性分析：</strong>
-                                图书馆业务具有持续性特点，要求系统具备 7×24 小时连续运行能力。为防止数据丢失，系统需建立自动备份机制，每日凌晨自动备份数据库。当服务器发生故障时，应能在 30 分钟内完成备用节点的切换与数据恢复，最大程度降低对借阅业务的影响。
+                                可靠性部分应结合学生本人可操作的测试条件来写。建议写成：系统在本地运行过程中，应能完成多次连续登录、查询、添加、修改、删除等操作而不出现明显报错或页面崩溃；对已经提交成功的数据，在刷新页面或重新登录后仍能正确显示；数据库数据应支持手动备份与恢复，备份文件能够正常导出，恢复后关键业务数据保持一致。这样写更容易在测试章节通过连续操作测试、刷新测试、重新登录测试和备份恢复测试进行说明。
                             </li>
                             <li>
                                 <strong>兼容性分析：</strong>
-                                考虑到师生使用的设备多样化，本系统前端界面需采用响应式布局（Responsive Design），能够自适应 PC 端、平板及手机端等不同分辨率的屏幕。同时，系统应全面兼容 Chrome、Firefox、Edge 等主流浏览器，确保在不同环境下功能均能正常使用。
+                                兼容性需求不要笼统写“兼容所有浏览器和设备”，而应根据自己实际测试情况描述。例如：本系统主要面向 PC 端使用，已在 Chrome 和 Edge 浏览器中完成功能验证，页面布局正常，按钮、表单、表格和图片均可正常显示；在常见桌面分辨率下页面无明显错位，核心功能可以正常操作。如果项目确实做了移动端适配，再补充手机端或平板端测试结果；如果没有实际测试，就不要随意扩大表述范围。
                             </li>
                         </ul>
                     </div>
@@ -1403,7 +1497,7 @@ stop
         </div>
     </div>
 
-    <div class="chapter-container">
+    <div class="chapter-container chapter-highlight-notice">
         <div class="chapter-header">
             <h2>第 4 章 系统设计</h2>
         </div>
