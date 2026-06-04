@@ -481,6 +481,39 @@
             line-height: 1.45;
         }
 
+        .sub-sub-section {
+            margin-top: 16px;
+            padding: 16px;
+            background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+            border: 1px dashed #dbe5f0;
+            border-radius: 18px;
+        }
+
+        .sub-sub-title {
+            display: block;
+            font-weight: 800;
+            color: #1d4ed8;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            line-height: 1.45;
+        }
+
+        .figure-group {
+            margin-top: 16px;
+            padding: 16px;
+            background: #ffffff;
+            border: 1px solid #e6ebf2;
+            border-radius: 18px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .figure-note {
+            margin-bottom: 10px;
+            color: #475467;
+            font-size: 0.96rem;
+            line-height: 1.75;
+        }
+
         .instruction-list {
             list-style: none;
             padding: 0;
@@ -1032,6 +1065,25 @@
                 padding-bottom: 10px;
             }
 
+            .sub-sub-section {
+                padding: 14px;
+                border-radius: 16px;
+            }
+
+            .sub-sub-title {
+                font-size: 0.96rem;
+                margin-bottom: 10px;
+            }
+
+            .figure-group {
+                padding: 14px;
+                border-radius: 16px;
+            }
+
+            .figure-note {
+                font-size: 0.93rem;
+            }
+
             .instruction-list li {
                 padding: 11px 12px 11px 40px;
                 font-size: 0.94rem;
@@ -1355,52 +1407,50 @@
                     <li>描述**核心业务**的数据流向（例如：用户下单 -> 商家接单 -> 发货）。</li>
                     <li><strong>要求：</strong> 必须搭配**业务流程图**。</li>
                 </ul>
-            </div>
+                <!-- 业务流程图画法：图书借阅，样式弱化版 -->
+                <details class="process-demo-container">
+                    <summary class="process-demo-header">
+                        <h2>业务流程图画法教程：图书借阅</h2>
+                    </summary>
+                    <div class="process-demo-body">
+                        <div class="process-demo-tips">
+                            <div style="font-weight:bold; margin-bottom:15px; color:#2c3e50; font-size:1.05em;">
+                                🎓 新手必看：3步搞定流程图（保姆级教程）
+                            </div>
 
-            <!-- 业务流程图画法：图书借阅，样式弱化版 -->
-            <details class="process-demo-container">
-                <summary class="process-demo-header">
-                    <h2>业务流程图画法教程：图书借阅</h2>
-                </summary>
-                <div class="process-demo-body">
-                    <div class="process-demo-tips">
-                        <div style="font-weight:bold; margin-bottom:15px; color:#2c3e50; font-size:1.05em;">
-                            🎓 新手必看：3步搞定流程图（保姆级教程）
-                        </div>
+                            <div class="tutorial-step">
+                                <span class="tutorial-step-title">第一步：让 AI 帮你写代码</span>
+                                <div class="tutorial-step-content">
+                                    把你的业务逻辑告诉 AI（如 ChatGPT/DeepSeek），让它生成 PlantUML 代码。<br>
+                                    <span style="background:#fff3cd; padding:2px 5px; border-radius:3px; font-size:0.9em; display:inline-block; margin-top:5px;">
+                                        🤖 <strong>提示词示例：</strong> "请帮我画一个[图书借阅]的业务流程图，使用 PlantUML 泳道图语法，包含[读者]和[系统]两个角色。注意生成的图要满足UML 2.0 或更高版本的标准规范"
+                                    </span>
+                                </div>
+                            </div>
 
-                        <div class="tutorial-step">
-                            <span class="tutorial-step-title">第一步：让 AI 帮你写代码</span>
-                            <div class="tutorial-step-content">
-                                把你的业务逻辑告诉 AI（如 ChatGPT/DeepSeek），让它生成 PlantUML 代码。<br>
-                                <span style="background:#fff3cd; padding:2px 5px; border-radius:3px; font-size:0.9em; display:inline-block; margin-top:5px;">
-                                    🤖 <strong>提示词示例：</strong> "请帮我画一个[图书借阅]的业务流程图，使用 PlantUML 泳道图语法，包含[读者]和[系统]两个角色。注意生成的图要满足UML 2.0 或更高版本的标准规范"
-                                </span>
+                            <div class="tutorial-step">
+                                <span class="tutorial-step-title">第二步：在线生成图片</span>
+                                <div class="tutorial-step-content">
+                                    复制 AI 生成的代码，打开在线工具进行渲染。<br>
+                                    🛠️ <strong>推荐工具：</strong> <a href="https://www.planttext.com/" target="_blank" class="tutorial-link">PlantText</a> 或 <a href="http://www.plantuml.com/plantuml" target="_blank" class="tutorial-link">PlantUML官网</a>
+                                </div>
+                            </div>
+
+                            <div class="tutorial-step">
+                                <span class="tutorial-step-title">第三步：微调与导出</span>
+                                <div class="tutorial-step-content">
+                                    如果流程有误，直接修改代码中的文字；确认无误后，右键保存图片或截图粘贴到论文中。
+                                </div>
                             </div>
                         </div>
 
-                        <div class="tutorial-step">
-                            <span class="tutorial-step-title">第二步：在线生成图片</span>
-                            <div class="tutorial-step-content">
-                                复制 AI 生成的代码，打开在线工具进行渲染。<br>
-                                🛠️ <strong>推荐工具：</strong> <a href="https://www.planttext.com/" target="_blank" class="tutorial-link">PlantText</a> 或 <a href="http://www.plantuml.com/plantuml" target="_blank" class="tutorial-link">PlantUML官网</a>
+                        <img src="img_2026/liuchengtu.png" alt="图书借阅业务流程图"/>
+                        PlantUML 代码示例
+                        <div class="process-demo-code-area">
+                            <div class="process-demo-code-header">
+
                             </div>
-                        </div>
-
-                        <div class="tutorial-step">
-                            <span class="tutorial-step-title">第三步：微调与导出</span>
-                            <div class="tutorial-step-content">
-                                如果流程有误，直接修改代码中的文字；确认无误后，右键保存图片或截图粘贴到论文中。
-                            </div>
-                        </div>
-                    </div>
-
-                    <img src="img_2026/liuchengtu.png" alt="图书借阅业务流程图"/>
-                    PlantUML 代码示例
-                    <div class="process-demo-code-area">
-                        <div class="process-demo-code-header">
-
-                        </div>
-                        <pre>
+                            <pre>
 @startuml
 title 图书借阅标准活动图
 
@@ -1432,10 +1482,11 @@ endif
 
 stop
 @enduml
-                        </pre>
+                            </pre>
+                        </div>
                     </div>
-                </div>
-            </details>
+                </details>
+            </div>
 
             <div class="sub-section">
                 <span class="sub-title">3.2 功能需求分析 <span class="must-have">核心</span></span>
@@ -1540,16 +1591,32 @@ stop
                 <span class="sub-title">4.2 详细设计</span>
 
                 <ul class="instruction-list">
-                    <li><strong>核心模块流程设计：</strong> 针对关键业务（如“借书”、“下单”），画出<strong>流程图</strong>，展示交互细节。<span class="must-have">流程图要符合以下要求(张海藩《软件设计与体系结构》P125)</span></li>
-                    <li>
-                        <ul class="instruction-list">
-                            <li><strong>4.2.1 XX功能设计</strong></li>
-                            <li><strong> 4.2.2 XX功能设计</strong></li>
-                        </ul>
-                    </li>
-                    <li><img src="img_2026/liu_cheng.png" alt="核心业务流程图"/></li>
-                    <li><strong>类设计（可选）：</strong> 如果是面向对象设计较强的系统，可以补充类图。</li>
+                    <li>不同的功能设计（如“借书”、“下单”），画出<strong>对应流程图</strong>，展示交互细节。</li>
                 </ul>
+
+                <div class="sub-sub-section">
+                    <span class="sub-sub-title">4.2.1 XX功能设计</span>
+                    <ul class="instruction-list">
+                        <li>围绕一个核心业务功能展开说明，例如借阅、下单、预约、审核等。</li>
+                        <li>需要说明该功能的处理流程、关键判断条件以及前后端交互过程。</li>
+                        <li><strong>建议：</strong> 本小节下直接放对应流程图和文字说明，不要把图和小节拆开写。</li>
+                    </ul>
+
+                    <div class="figure-group">
+                        <p class="figure-note"><strong>核心模块流程设计：</strong> 针对关键业务（如“借书”、“下单”），画出流程图，展示交互细节。流程图要符合以下要求(张海藩《软件设计与体系结构》P125)</p>
+                        <img src="img_2026/liu_cheng.png" alt="核心业务流程图"/>
+                    </div>
+                </div>
+
+                <div class="sub-sub-section">
+                    <span class="sub-sub-title">4.2.2 XX功能设计</span>
+                    <ul class="instruction-list">
+                        <li>继续选择另一个核心功能进行详细设计，写法与 4.2.1 保持一致。</li>
+                        <li>如果是面向对象设计较强的系统，可以在此补充类图或模块交互说明。</li>
+                        <li><strong>写作提醒：</strong> 4.2.x 的每个功能设计，后文第 5 章最好都有对应实现小节，形成前后呼应。</li>
+                    </ul>
+                </div>
+
                 <div class="writing-tip">
                     <strong>🔥 写作技巧（前后呼应）：</strong>
                     此处设计的每一个核心业务流程（如“图书借阅”），都必须在第 5 章有对应的“图书借阅功能实现”小节，形成“设计 -> 实现”的闭环逻辑。
@@ -1727,16 +1794,15 @@ stop
                         <p>用户在登录界面输入账号和密码，点击登录按钮。前端首先进行非空校验，随后通过 Axios 发送 POST 请求将加密后的数据提交到后端 <code>/api/login</code> 接口。后端 Controller 接收请求后，调用 Spring Security 进行身份认证。若认证通过，系统生成 JWT Token 并返回给前端；若失败，则返回错误提示信息。前端接收到 Token 后将其存储在 LocalStorage 中，并跳转至系统首页。</p>
                     </div>
                 </details>
+
+                <details class="text-example-area">
+                    <summary class="text-example-header">写法示例：核心业务流程描述</summary>
+                    <div class="text-example-content">
+                        <p><strong>图书借阅业务流程如下：</strong></p>
+                        <p>图书借阅业务的实现流程如下：用户在前端页面点击"立即借阅"按钮后，前端将用户ID和图书ID封装为JSON数据发送至后端接口；Controller层接收请求后，调用Service层进行业务处理；Service层首先校验用户状态是否正常，随后查询图书库存是否充足；若校验通过，系统扣减图书库存，并在数据库中生成一条借阅记录（状态为"借出"）；最后，后端返回操作成功信息，前端提示用户"借阅成功"。</p>
+                    </div>
+                </details>
             </div>
-
-            <details class="text-example-area">
-                <summary class="text-example-header">写法示例：核心业务流程描述</summary>
-                <div class="text-example-content">
-                    <p><strong>图书借阅业务流程如下：</strong></p>
-                    <p>图书借阅业务的实现流程如下：用户在前端页面点击"立即借阅"按钮后，前端将用户ID和图书ID封装为JSON数据发送至后端接口；Controller层接收请求后，调用Service层进行业务处理；Service层首先校验用户状态是否正常，随后查询图书库存是否充足；若校验通过，系统扣减图书库存，并在数据库中生成一条借阅记录（状态为"借出"）；最后，后端返回操作成功信息，前端提示用户"借阅成功"。</p>
-
-                </div>
-            </details>
         </div>
     </div>
 
